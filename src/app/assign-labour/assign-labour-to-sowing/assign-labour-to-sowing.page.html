@@ -1,0 +1,51 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>Assign labour team</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+  
+    <!--<h1>welcome to all </h1>-->
+    <ion-item>
+      <ion-label>Labour Type</ion-label>
+      <ion-select [interfaceOptions]="'Popover'" interface="popover" placeholder="Select One" [(ngModel)]="labour_type_id" (ionChange)="onLaboutTypeChanged()">
+        <ion-select-option *ngFor="let labour_type of labour_types" [value]="labour_type.id">{{labour_type.name}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="labour_type_id != null">
+      <ion-label>Labour Team</ion-label>
+      <ion-select [interfaceOptions]="'Popover'" interface="popover" placeholder="Select One" [(ngModel)]="labour_team_id">
+        <ion-select-option *ngFor="let labour_team of labour_teams[labour_type_id]" [value]="labour_team.id">
+          {{labour_team.name}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Operation</ion-label>
+      <ion-select [interfaceOptions]="'Popover'" interface="popover" placeholder="Select One" #sowing_operation_type_id>
+        <ion-select-option *ngFor="let sowing_operation_type of sowing_operation_types"
+                           [value]="sowing_operation_type.id">{{sowing_operation_type.name}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Date</ion-label>
+      <ion-datetime display-format="DD, MMM , YYYY" [(ngModel)]="todate"></ion-datetime>
+    </ion-item>
+    <ion-row>
+      <ion-col>
+        <ion-button color="Medium" (click)="closePopup()">
+            <ion-icon name="arrow-round-back"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button
+            (click)="assignLabourToSowingOperation(labour_team_id, sowing_operation_type_id.value, todate)">
+          Assign
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-content>
+  

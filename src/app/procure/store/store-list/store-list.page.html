@@ -1,0 +1,136 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>store-list</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <ion-slides #slider [options]="slideOpts" style="width: 100%; height: 100%;">
+      <ion-slide style="overflow: auto;">
+        <!-- <ion-card style="width: 95%;"> -->
+        <ion-list lines="inset" inset="true">
+          <!-- <span style="font-size: x-small; font-style: italic;">Select End Product of this Batch</span> -->
+          <span style="font-size: x-small; font-style: italic;">Select Person Incharge for this Batch</span>
+          <ion-item>
+            <ion-label>Incharge</ion-label>
+            <ion-select interface="popover" [(ngModel)]="batch_incharge_id">
+              <ion-select-option *ngFor="let incharge of batch_incharge" [value]="incharge.id">{{incharge.first_name}}&nbsp;{{incharge.last_name}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Notes</ion-label>
+            <ion-input type="text" [(ngModel)]="notes"></ion-input>
+          </ion-item><br>
+          <span style="font-size: x-small; font-style: italic;">Select A Crop</span>
+          <ion-row>
+            <ion-list style="width: 100%">
+              <ion-item>
+                <ion-label>Crop</ion-label>
+                <ion-select interface="popover" [(ngModel)]="selected_crop_id">
+                  <ion-select-option *ngFor="let crop of crops" [value]="crop.id">{{crop.name}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-list>
+          </ion-row>
+          <ion-row *ngIf="selected_crop_id != null">
+            <ion-list style="width: 100%">
+              <h6 style="text-align: center; font-size: x-small; font-style: italic;">Select Grades</h6>
+              <ion-item *ngFor="let grade of grades_and_channels[selected_crop_id]['grades']">
+                <ion-label style="white-space: normal; font-size: 15px;">{{grade.term}}</ion-label>
+                <ion-checkbox slot="start" [value]="grade.id" (ionChange)="onGradeSelected(grade.id)" color="secondary"></ion-checkbox>
+              </ion-item>
+            </ion-list>
+          </ion-row>
+          <ion-row *ngIf="selected_crop_id != null">
+            <ion-list style="width: 100%">
+              <h6 style="text-align: center; font-size: x-small; font-style: italic;" *ngIf="grades_and_channels[selected_crop_id]['channels'].length != 0">Select
+                Channels</h6>
+              <ion-item *ngFor="let channel of grades_and_channels[selected_crop_id]['channels']">
+                <ion-label style="white-space: normal; font-size: 15px;">{{channel.term}}</ion-label>
+                <ion-checkbox slot="start" [value]="channel.id" (ionChange)="onChannelSelected(channel.id)" color="secondary"></ion-checkbox>
+              </ion-item>
+            </ion-list>
+          </ion-row>
+        </ion-list>
+        <!-- </ion-card> -->
+        <ion-row>
+          <ion-col></ion-col>
+          <ion-col (click)="onArrowClicked()">
+            <ion-button>
+              <ion-icon style="font-size: 25px;" name="arrow-forward" slot="icon-only"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+      </ion-slide>
+      <ion-slide style="overflow: auto;">
+        <ion-list lines="full">
+          <ion-list-header (click)="slideBack()">
+            <ion-button>
+              <ion-icon style="font-size: 25px;" name="arrow-back"></ion-icon>
+            </ion-button>
+            <ion-label style="font-size: 20px; color: brown; white-space: normal;">Select Trucks to Include</ion-label>
+          </ion-list-header>
+          <ion-card *ngFor="let truck of list_of_trucks; let truck_index=index">
+            <ion-card-header style="background-color: tan;">
+              <ion-card-subtitle style="color: black;">
+                <ion-row>
+                  <ion-col size="1">
+                    <ion-checkbox style="float: left;" color="secondary" (ionChange)="getAllProcurementbyTrip(truck.pickup_trip_id, truck.show_list)"
+                      [(ngModel)]="truck.truck_checked"></ion-checkbox>
+                  </ion-col>
+                  <ion-col (click)="showProcurement(truck_index)" size="6">{{truck.license}}</ion-col>
+                  <ion-col (click)="showProcurement(truck_index)" size="4">{{truck.quantity}}</ion-col>
+                  <ion-col (click)="showProcurement(truck_index)" size="1">
+                    <ion-icon style="float:right; font-size: 19px" [name]="truck.show_list ?  'arrow-dropdown-circle': 'arrow-dropright-circle'"></ion-icon>
+                  </ion-col>
+                </ion-row>
+              </ion-card-subtitle>
+            </ion-card-header>
+            <span *ngIf="truck.show_list">
+              <ion-list lines="inset">
+                <ion-row style="text-align: center; color: tan;">
+                  <ion-col size="1"></ion-col>
+                  <ion-col>Farmer</ion-col>
+                  <ion-col>Grade</ion-col>
+                  <ion-col>Quantity</ion-col>
+                </ion-row>
+              </ion-list>
+              <ion-card-content>
+                <ion-list *ngFor="let trip of pickup_trip[truck.pickup_trip_id]; let procurement_index=index" lines="inset">
+                  <ion-row style="text-align: center;">
+                    <ion-col size="1">
+                      <ion-checkbox style="float: left;" color="secondary" (ionChange)="appendProcurementIds(trip.procurement_id, edit_quantity[truck_index][procurement_index]['quantity'], trip.instance_crop, trip.grade)"
+                        [(checked)]="truck.truck_checked"></ion-checkbox>
+                    </ion-col>
+                    <ion-col>{{trip.farmer | titlecase}}</ion-col>
+                    <ion-col>{{trip.grade}}</ion-col>
+                    <ion-col>
+                      <span *ngIf="!edit_quantity[truck_index][procurement_index]['edit']" (click)="onEditClicked(truck_index, procurement_index, trip.quantity)">
+                        {{edit_quantity[truck_index][procurement_index]['quantity']}} &nbsp;
+                        <ion-icon name="create"></ion-icon>
+                      </span>
+                      <span *ngIf="edit_quantity[truck_index][procurement_index]['edit']">
+                        <ion-input type="number" step="0.01" style="background-color: lightgrey;" [(ngModel)]="edit_quantity[truck_index][procurement_index]['quantity']"></ion-input>
+                        <ion-icon name="save" (click)="onValueUpdate(truck_index, procurement_index, edit_quantity[truck_index][procurement_index]['quantity'], trip.quantity, trip.procurement_id, trip.instance_crop)"></ion-icon>
+                      </span>
+                    </ion-col>
+                  </ion-row>
+                </ion-list>
+              </ion-card-content>
+            </span>
+          </ion-card>
+          <ion-row>
+            <ion-col></ion-col>
+            <ion-col>
+              <ion-button color="success" (click)="onBatchInitiated()">Create Batch</ion-button>
+            </ion-col>
+            <ion-col></ion-col>
+          </ion-row>
+        </ion-list>
+      </ion-slide>
+    </ion-slides>
+  </ion-content>

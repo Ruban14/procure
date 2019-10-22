@@ -1,0 +1,102 @@
+<script src="../../procure/farmers/farmers.page.ts"></script>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Sowings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row style="margin-bottom: 6%">
+    <ion-fab vertical="top" horizontal="start">
+      <ion-fab-button size="small" color="light">
+        <ion-icon name="funnel"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-list side="end">
+        <ion-fab-button color="medium" (click)="getRegularSowings()">
+          <ion-icon name="ribbon"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button color="medium" (click)="getExcludedSowings()">
+          <ion-icon name="archive"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
+    </ion-fab>
+    <h6 *ngIf="regular_suppliers" class="span-page-title-second">Regular Providers</h6>
+    <h6 *ngIf="!regular_suppliers" class="span-page-title-second">In-frequent Providers</h6>
+  </ion-row>
+  <ion-searchbar animated="true"  show-cancel-button mode="ios" #filter_term></ion-searchbar>
+
+  <ion-row>
+    <ion-col>
+      <ion-icon name="person" style="color: green"></ion-icon> Labour Assigned
+      <br>
+      <ion-icon name="git-branch" style="color: green"></ion-icon> Route Assigned
+    </ion-col>
+
+    <ion-col>
+      <span *ngFor="let legend of legends">
+        <span style="height: 100%; width: 100%;">
+          <div style=" height: 10px; width: 10px; display: inline-block" [style.background-color]="legend['color']"></div>
+          {{legend['label']}} - #{{legend['count']}}
+        </span><br>
+      </span>
+    </ion-col>
+  </ion-row>
+
+  <ion-virtual-scroll [items]="sowings | searchSowings: filter_term.value">
+    <ion-item *virtualItem="let sowing">
+      <ion-card style="width: 100%" [style.border-left]="sowing['card_border_left_style']">
+        <!--<ion-card *ngFor="let sowing of sowings">-->
+        <!--<ion-card *ngFor="let sowing of sowings | searchSowings : filter_term.value; let sowing_index=index">-->
+        <ion-row>
+
+          <!--ASSIGN LABOUR-->
+          <ion-col size="1">
+            <ion-icon name="person" style="color: green" *ngIf="sowing['is_labor_assigned']"></ion-icon>
+            <br>
+            <ion-icon name="git-branch" style="color: green" *ngIf="sowing['has_route_added']"></ion-icon>
+          </ion-col>
+
+          <ion-col>
+            <!--row one-->
+            <ion-row>
+              <span *ngFor="let row_one_item of sowing['row_one']">{{row_one_item}}, &nbsp;</span>
+            </ion-row>
+            <!--row two-->
+            <ion-row style="padding-top: 5px">
+              <span style="font-style: italic; font-size: small; color: gray" *ngFor="let row_two_item of sowing['row_two']">{{row_two_item}},
+                &nbsp;</span>
+            </ion-row>
+          </ion-col>
+
+          <!--ROUTE LINK BUTTON-->
+          <ion-col size="2">
+            <ion-fab vertical="center" horizontal="end">
+              <ion-fab-button color="light" size="small">
+                <ion-icon name="more"></ion-icon>
+              </ion-fab-button>
+
+              <ion-fab-list side="start">
+                <ion-fab-button color="medium" (click)="presentModal(sowing.sowing_id)">L</ion-fab-button>
+                <!--<ion-fab-button color="warning" [disabled]="sowing['make_add_route_active'] == false" (click)="presentLinkRoute(sowing['sowing_id'])">R</ion-fab-button>-->
+                <ion-fab-button color="warning" (click)="navPageToProcure(sowing['sowing_id'], sowing['instance_crop_id'])">P
+                </ion-fab-button>
+              </ion-fab-list>
+
+            </ion-fab>
+            <!--<ion-button (click)="presentLinkRoute(sowing['sowing_id'])" [disabled]="sowing['is_active_route_link']">R-->
+            <!--</ion-button>-->
+          </ion-col>
+        </ion-row>
+        <!--<ion-row>-->
+        <!--<ion-col *ngIf="sowing['is_show_navigate_vehicle_page']">-->
+        <!--<ion-button (click)="navPageToProcure(sowing['sowing_id'], sowing['instance_crop_id'])">Proc</ion-button>-->
+        <!--</ion-col>-->
+        <!--</ion-row>-->
+      </ion-card>
+
+    </ion-item>
+  </ion-virtual-scroll>
+</ion-content>

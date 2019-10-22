@@ -1,0 +1,34 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>Batch: Add/Manage</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <ion-fab vertical="top" horizontal="end" slot="fixed">
+      <ion-fab-button size="small" (click)="onAddBatch()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    <span style="font-size: 11px; float: right; margin-top: -13px;">create new batch</span>
+  
+    <ion-list inset="true" lines="inset">
+      <ion-list-header>
+        <ion-label style="color: black; font-size: large;">Choose Batch to Manage!</ion-label>
+      </ion-list-header>
+      <ion-item *ngFor="let batch of batch_list" (click)="onBatchClicked(batch, batch.crop_id)">
+        <ion-label>
+          <span style="font-weight: bold;">{{batch.batch_code}}</span><span style="font-size: x-small; font-style: italic;" [ngStyle]="{color: checkStatus(batch.status_id)}">&nbsp;&nbsp;{{batch.status}}</span><br>
+          <span style="font-size: small; font-style: italic;">{{batch.crop_name}}-{{batch.incharge_firstname}}-{{batch.product}}</span><br>
+          <span style="font-size: small; font-style: italic;">
+            <span *ngIf="batch['start_date'] != 'NaT'">{{batch.start_date | date: 'dd/MMM'}} -</span>
+            <span *ngIf="batch['end_date'] != 'NaT'">{{batch.end_date | date: 'dd/MMM'}}</span>
+          </span>
+        </ion-label>
+        <ion-icon name="arrow-dropright" slot="end" style="float: right;"></ion-icon>
+      </ion-item>
+    </ion-list>
+  </ion-content>

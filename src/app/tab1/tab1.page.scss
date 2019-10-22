@@ -1,0 +1,26 @@
+.dashboard-tile {
+  border: solid 1px transparent;
+  background-color: transparent;
+  padding-top: 20px;
+  text-align: center
+}
+
+.dashboard-tile-iconspan {
+  padding-left: 0px;
+}
+
+.dashboard-grid {
+  padding-top: 0;
+}
+
+.dashboard-tile-icon {
+  width: 65%;
+  // margin-left: 10%;
+}
+
+.dashboard-tile-icon-title {
+  margin-left: 5%;
+  text-align: center;
+  color: #CC0033;
+  white-space: normal;
+}

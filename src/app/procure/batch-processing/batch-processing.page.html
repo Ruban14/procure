@@ -1,0 +1,185 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>Batch Management</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="onHomeIconClicked()">
+          <ion-icon slot="icon-only" name="home"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <!-- <ion-buttons slot="end">
+        <ion-button (click)="toggleDisable()">Toggle</ion-button>
+      </ion-buttons> -->
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <span *ngIf="batch_obj != null">
+      <ion-row style="background: snow;">
+        <ion-col size="3">
+          <ion-button size="small" color="success" (click)="onBatchStart()"
+            [disabled]="!batch_obj.hasOwnProperty('start_date') && !batch_obj.hasOwnProperty('end_date') ? 'false' : 'true'">
+            Start</ion-button>
+        </ion-col>
+  
+        <ion-col size="6" text-center style="font-weight: bold;">
+          <span style="font-weight: normal; font-style: italic;">{{batch_obj['batch_code']}}:</span> {{batch_obj.status}}
+        </ion-col>
+  
+        <ion-col size="3">
+          <ion-button size="small" color="danger" (click)="onBatchEnd()"
+            [disabled]="!batch_obj.hasOwnProperty('end_date') && batch_obj.hasOwnProperty('start_date') ? 'false' : 'true'">
+            End</ion-button>
+        </ion-col>
+  
+      </ion-row>
+      <!-- <ion-row style="text-align: center;">
+        <ion-col size="6">
+          <ion-button size="small" color="success" (click)="onBatchStart()" [disabled]="!batch_obj.hasOwnProperty('start_date') && !batch_obj.hasOwnProperty('end_date') ? 'false' : 'true'">Start</ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button size="small" color="danger" (click)="onBatchEnd()" [disabled]="!batch_obj.hasOwnProperty('end_date') && batch_obj.hasOwnProperty('start_date') ? 'false' : 'true'">End</ion-button>
+        </ion-col>
+      </ion-row> -->
+    </span>
+    <ion-slides #slider [options]="slideOpts" style="width: 100%; height: 100%;">
+      <ion-slide style="overflow: auto;">
+        <ion-row>
+          <ion-col size="2">
+            <ion-item id="process-check-box"
+              *ngFor="let process_check of process_check_list; let process_check_list_index=index" style="padding: 0%;">
+              <ion-checkbox style="margin: 0%;" color="success" (ionChange)="onCompleteClicked(process_check_list_index)"
+                [disabled]="process_check.isChecked" slot="start" [checked]="process_check.isChecked"></ion-checkbox>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-reorder-group (ionItemReorder)="reorderItems($event)" disabled="false">
+              <ion-item *ngFor="let current_process of current_process_list; let current_process_index = index">
+                <ion-label (click)="onCurrentProcessClicked(current_process)" style="white-space: normal;">
+                  {{current_process.name}}</ion-label>
+                <ion-icon name="close-circle-outline"
+                  [ngClass]="current_process.is_completed ? 'hide-active-icon': 'active-icon'"
+                  (click)="onRemoveClicked(current_process_index, current_process['batch_process_map_id'])"></ion-icon>
+                <ion-reorder></ion-reorder>
+              </ion-item>
+            </ion-reorder-group>
+          </ion-col>
+        </ion-row>
+      </ion-slide>
+      <ion-slide style="overflow: auto;">
+        <ion-list style="margin-top: 10%" lines="full">
+          <ion-list-header (click)="slideTo(0)">
+            <ion-icon style="font-size: 25px;" name="arrow-back"></ion-icon>
+            <ion-label *ngIf="current_process_object != null" style="font-size: 20px; color: brown; white-space: normal;">
+              {{current_process_object.name}}</ion-label>
+          </ion-list-header>
+          <ion-row>
+            <ion-col></ion-col>
+            <ion-col></ion-col>
+            <ion-col>
+              <ion-button size="small" color="medium" (click)="processedProductToStorage()">store <ion-icon
+                  name="arrow-forward" slot="end"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+          <!-- <div>
+            <ion-item>
+              <ion-label>Processed Product</ion-label>
+              <ion-select interface="popover" placeholder="Select One">
+                <ion-select-option *ngFor="let processed_product of processed_products"
+                  [value]="processed_product.processed_product_id">{{processed_product['processed_product_name']}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label>Quantity</ion-label>
+              <ion-input style="padding-left: 15px;" class="input-item" type="text"></ion-input>
+            </ion-item>
+          </div> -->
+          <span *ngFor="let process_question of process_questions; let process_index=index">
+            <ion-item *ngIf="process_question['question_type'] == 'text'" text-wrap style="width: 100%; border: solid 1px grey;">
+              <ion-label style="font-size: 23px;" class="span-question-header" position="stacked">
+                {{process_question['question']}}</ion-label>
+              <ion-input style="padding-left: 15px;" class="input-item" type="text"
+                [(ngModel)]="process_answers[process_index]['answer']"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="process_question['question_type'] == 'dropdown'" text-wrap style="width: 100%;">
+              <ion-label style="font-size: 23px;" class="span-question-header" position="stacked">
+                {{process_question['question']}}</ion-label>
+              <ion-select style="padding-left: 15px" [(ngModel)]="process_answers[process_index]['answer']"
+                interface="popover">
+                <ion-select-option *ngFor="let answer of process_question['answers']" [value]="answer">{{answer}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-list *ngIf="process_question['question_type'] == 'checkbox'" text-wrap style="width: 100%;">
+              <span class="span-question-header">{{process_question['question']}}</span><br>
+              <ion-row style="margin-left: 15px;">
+                <ion-col size="6" style="padding: 0%" *ngFor="let answer of process_question['answers']">
+                  <ion-item>
+                    <ion-label>{{answer}}</ion-label>
+                    <ion-checkbox slot="start" style="margin-right: 10px;"
+                      (ionChange)="checkboxAnswerChecked(process_index, answer)" [value]="answer" color="dark">
+                    </ion-checkbox>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-list>
+            <ion-list *ngIf="process_question['question_type'] == 'radio'" lines="inset">
+              <span class="span-question-header">{{process_question['question']}}</span><br>
+              <ion-radio-group [(ngModel)]="process_answers[process_index]['answer']">
+                <ion-row style="margin-left: 15px;">
+                  <ion-col size="6" *ngFor="let answer of process_question['answers']" style="padding: 0%;">
+                    <ion-item>
+                      <ion-label>{{answer}}</ion-label>
+                      <ion-radio style="margin-right: 10px;" slot="start" [value]="answer"></ion-radio>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-radio-group>
+            </ion-list>
+          </span>
+        </ion-list>
+        <span *ngIf="process_start_date != null">
+          <ion-row>
+            <ion-col col-6>
+              <ion-item>
+                <span class="span-question-header" position="floating">Start Date</span>
+                <p>
+                  <ion-datetime display-format="DD-MMM-YY HH:mm" picker-format="DD-MMM-YY HH:mm"
+                    [(ngModel)]="process_start_date"></ion-datetime>
+              </ion-item>
+            </ion-col>
+            <ion-col>
+              <ion-item>
+                <span class="span-question-header" position="floating">End Date</span><br>
+                <ion-datetime display-format="DD-MMM-YY HH:mm" picker-format="DD-MMM-YY HH:mm"
+                  [(ngModel)]="process_end_date"></ion-datetime>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </span>
+        <ion-row>
+          <ion-col></ion-col>
+          <ion-col>
+            <ion-button color="success" (click)="onProcessAnswerUpdate()">Update</ion-button>
+          </ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+      </ion-slide>
+    </ion-slides>
+  </ion-content>
+  
+  <ion-footer *ngIf="!footerIsHidden" style="height: 30%; overflow: auto; background-color:tan;">
+    <h6 text-center style="color: chocolate; font-weight: bold;">Choose to ADD New Processes!</h6>
+    <ion-grid>
+      <ion-row align-items-center>
+        <ion-col *ngFor="let process of process_list" (click)="onProcessItemClicked(process)">
+          <!-- <ion-label>{{process.name}}</ion-label> -->
+          <ion-button size="small" shape="round" color="light">{{process.name}}</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-footer>

@@ -1,0 +1,106 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Home</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onLogout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="ion-padding">
+    <span style="font-style: italic; font-size: medium; color: #989aa2">Procurement</span>
+    <ion-row>
+      <ion-col size="4" class="dashboard-tile" (click)="routePage('/farmers')" >
+        <span class="dashboard-tile-iconspan">
+          <img src="assets/dashboard_icon/procure.png" class="dashboard-tile-icon">
+          <ion-label class="dashboard-tile-icon-title">Procure</ion-label>
+        </span>
+      </ion-col>
+
+      <ion-col size="4" class="dashboard-tile" (click)="routePage('/routes')">
+        <span class="dashboard-tile-iconspan">
+          <img src="assets/dashboard_icon/route.png" class="dashboard-tile-icon">
+          <ion-label class="dashboard-tile-icon-title">Routes
+          </ion-label>
+        </span>
+      </ion-col>
+
+      <ion-col size="4" class="dashboard-tile" (click)="routePage('/procurement-history')">
+        <span class="dashboard-tile-iconspan">
+          <img src="assets/dashboard_icon/history.png" class="dashboard-tile-icon">
+          <ion-label class="dashboard-tile-icon-title">Proc History</ion-label>
+        </span>
+      </ion-col>
+
+      <ion-col size="4" class="dashboard-tile" (click)="routePage('/storage-vehicles')">
+        <span class="dashboard-tile-iconspan">
+          <img src="assets/dashboard_icon/store.png" class="dashboard-tile-icon">
+          <ion-label class="dashboard-tile-icon-title">Store It</ion-label>
+        </span>
+      </ion-col>
+
+      <ion-col size="4" class="dashboard-tile" (click)="routePage('/stock-list')">
+        <span class="dashboard-tile-iconspan">
+          <img src="assets/dashboard_icon/inventory.png" class="dashboard-tile-icon">
+          <ion-label class="dashboard-tile-icon-title">Inventory</ion-label>
+        </span>
+      </ion-col>
+
+      <ion-col size="4" class="dashboard-tile" (click)="routePage('/assign-labour-sowings')">
+        <span class="dashboard-tile-iconspan">
+          <img src="assets/dashboard_icon/schedule.png" class="dashboard-tile-icon">
+          <ion-label class="dashboard-tile-icon-title">Schedule</ion-label>
+        </span>
+      </ion-col>
+
+      <ion-col size="4" class="dashboard-tile" (click)="routePage('/register-pickup-trip')">
+        <span class="dashboard-tile-iconspan">
+          <img src="assets/dashboard_icon/manage.png" class="dashboard-tile-icon">
+          <ion-label class="dashboard-tile-icon-title">Manage</ion-label>
+        </span>
+      </ion-col>
+    </ion-row>
+
+    <hr style="background-color: #c1c3cb">
+    <span style="font-style: italic; font-size: medium; color: #989aa2">Processing</span>
+    <ion-row>
+
+      <ion-col size="4" class="dashboard-tile" (click)="routePage('/batch-list')">
+        <span class="dashboard-tile-iconspan">
+          <img src="assets/dashboard_icon/process.png" class="dashboard-tile-icon">
+          <ion-label class="dashboard-tile-icon-title">Process</ion-label>
+        </span>
+      </ion-col>
+    </ion-row>
+
+    <hr style="background-color: #c1c3cb">
+    <span style="font-style: italic; font-size: medium; color: #989aa2">Advisory</span>
+    <ion-row>
+
+      <ion-col size="4" class="dashboard-tile" (click)="routePage('/advisory-message')">
+        <span class="dashboard-tile-iconspan">
+          <img src="assets/dashboard_icon/Message.png" class="dashboard-tile-icon">
+          <ion-label class="dashboard-tile-icon-title">Message</ion-label>
+        </span>
+      </ion-col>
+
+      <ion-col size="4" class="dashboard-tile" (click)="routePage('/event-log')">
+        <span class="dashboard-tile-iconspan">
+          <img src="assets/dashboard_icon/event.png" class="dashboard-tile-icon">
+          <ion-label class="dashboard-tile-icon-title">Event</ion-label>
+        </span>
+      </ion-col>
+
+      <ion-col size="4" class="dashboard-tile" (click)="routePage('/supporting-business')">
+        <span class="dashboard-tile-iconspan">
+          <img src="assets/dashboard_icon/business.png" class="dashboard-tile-icon" style="width: 85%;">
+          <ion-label class="dashboard-tile-icon-title">Business</ion-label>
+        </span>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+</ion-content>

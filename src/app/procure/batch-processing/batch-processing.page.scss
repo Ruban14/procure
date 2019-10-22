@@ -1,0 +1,39 @@
+.active-icon {
+    color: red;
+}
+
+.hide-active-icon {
+    display: none;
+}
+
+ion-item {
+    --padding-top: 0%;
+    --padding-end:0%;
+    --padding-bottom:0%;
+    --padding-start:0%;
+    --inner-padding-bottom: 0%;
+    --inner-padding-end: 0%;
+    --inner-padding-start: 0%;
+    --inner-padding-top: 0%;
+}
+
+
+.swiper-slide {
+    display: unset;
+}
+
+.list-md .item-lines-full, .list-md-lines-full .item, .list-md .item-lines-inset, .list-md-lines-inset .item{
+    --border-width: 0;
+    --inner-border-width: 0;
+}
+
+.span-question-header {
+    color:black;
+    font-size: large;
+    font-weight: bold;
+    float: left;
+}
+
+.input-item {
+    --border-width: 0 0 1px 0;
+}

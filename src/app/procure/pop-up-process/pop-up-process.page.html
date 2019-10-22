@@ -1,0 +1,40 @@
+<ion-header>
+
+    <ion-toolbar>
+      <ion-title>{{process_data_dict['name'] | titlecase}}</ion-title>
+      <ion-buttons slot="primary">
+        <ion-button (click)="dismissModal()">
+          <ion-icon slot="icon-only" color="danger" name="close-circle-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Start Date</ion-label>
+          <ion-datetime display-format="DD-MMM-YY HH:mm" picker-format="DD-MMM-YY HH:mm" [(ngModel)]="process_data_dict['start_date']" required></ion-datetime>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">End Date</ion-label>
+          <ion-datetime display-format="DD-MMM-YY HH:mm" picker-format="DD-MMM-YY HH:mm" [(ngModel)]="process_data_dict['end_date']" required></ion-datetime>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col>
+        <ion-button (click)="onUpdate()">update </ion-button>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  
+  </ion-content>
+  

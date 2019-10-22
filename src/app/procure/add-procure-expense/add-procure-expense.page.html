@@ -1,0 +1,42 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>add-procure-expense</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+  
+    <form [formGroup]="expense_form">
+      <ion-list lines="inset" inset="true">
+        <ion-item>
+          <ion-label>Type</ion-label>
+          <!--<ion-input formControlName="type"></ion-input>-->
+          <ion-select interface="popover" formControlName="type_id">
+            <ion-select-option *ngFor="let type of expense_types" [value]="type.id">{{type.name}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label>Date</ion-label>
+          <ion-datetime display-format="DD, MMM , YYYY" formControlName="date"></ion-datetime>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label>Amount in Rs</ion-label>
+          <ion-input type="number" formControlName="amount"></ion-input>
+        </ion-item>
+      </ion-list>
+    </form>
+    <ion-row>
+      <ion-col>
+        <ion-button color="Medium" (click)="closePopup()">Back</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button [disabled]="!expense_form.valid"
+            (click)="addProcurementExpense()">
+          Add
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-content>
+  

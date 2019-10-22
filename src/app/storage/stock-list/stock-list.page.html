@@ -1,0 +1,260 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>Inventory</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-segment [(ngModel)]="segment_type" (ionChange)="onSegmentChanged()">
+      <ion-segment-button value="procurement_segment" class="color-segment" checked>
+        Procurement
+      </ion-segment-button>
+      <ion-segment-button value="product_segment" class="color-segment">
+        Product
+      </ion-segment-button>
+    </ion-segment>
+  
+    <ion-list>
+      <ion-radio-group (ionChange)="onRadioChanged()" [(ngModel)]="selected_radio_value">
+        <ion-list-header style="margin: 0%">
+          <ion-label>Filter by</ion-label>
+        </ion-list-header>
+  
+        <ion-row>
+          <ion-col size="6">
+            <ion-item>
+              <ion-label>Storage Wise</ion-label>
+              <ion-radio style="margin: 0%; margin-right: 10px;" slot="start" value="section" color="danger" checked>
+              </ion-radio>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6">
+            <ion-item>
+              <ion-label>Product Wise</ion-label>
+              <ion-radio style="margin: 0%; margin-right: 10px;" slot="start" value="product" color="danger"></ion-radio>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+  
+      </ion-radio-group>
+    </ion-list>
+  
+    <div [ngSwitch]="segment_type">
+      <span *ngIf="selected_radio_value === 'section'">
+        <ion-list *ngSwitchCase="'procurement_segment'">
+          <ion-list lines="full">
+            <ion-card *ngFor="let storage of storages; let storage_index=index">
+              <ion-card-header style="background-color: tan;">
+                <ion-card-subtitle style="color: black;">
+                  <ion-row>
+                    <ion-col (click)="showStorageStock(storage_index)">
+                      {{storage.storage_name}}-{{storage.storage_section_name}}</ion-col>
+                    <ion-col (click)="showStorageStock(storage_index)" size="1">
+                      <ion-icon style="float:right; font-size: 19px"
+                        [name]="storage.show_list ?  'arrow-dropdown-circle': 'arrow-dropright-circle'"></ion-icon>
+                    </ion-col>
+                  </ion-row>
+                </ion-card-subtitle>
+              </ion-card-header>
+              <span *ngIf="storage.show_list">
+                <ion-list lines="inset">
+                  <ion-row style="text-align: left; color: #4a4abb; padding-left: 12px;">
+                    <!-- <ion-col size="1"></ion-col> -->
+                    <ion-col size="3">GRN</ion-col>
+                    <ion-col size="2">Proc</ion-col>
+                    <ion-col size='4'>Lot#/Gr/ <span *ngIf="business_short_name ==='Onganic'">St</span><span
+                        *ngIf="business_short_name !=='Onganic'">Channel</span> </ion-col>
+                    <ion-col>Qty</ion-col>
+                  </ion-row>
+                </ion-list>
+                <ion-card-content style="padding: 0%">
+                  <ion-list
+                    *ngFor="let lot_wise of storage_proc[storage.id]; let storage_procurement_index=index; let even_index=even"
+                    lines="inset">
+                    <div [style.background-color]="even_index ? '#e8e5e5': 'unset'">
+                      <ion-row style="text-align: left; font-size: small;">
+                        <!-- <ion-col style="font-weight: bold;">{{lot_wise.instance_crop_name}}</ion-col> -->
+                        <ion-col style="font-weight: bold;" size="3">
+                          <span *ngIf="lot_wise['qr_code'] !== null">
+                            {{lot_wise['qr_code'] | slice: 0:7}}<br>{{lot_wise['qr_code'] | slice: -7}}
+                          </span>
+                        </ion-col>
+                        <ion-col size="2" style="font-size: 12px">{{lot_wise.date_of_procurement | date : 'ddMMMyy'}}
+                        </ion-col>
+                        <ion-col size="4">
+                          {{lot_wise.lot_code}}/{{lot_wise.grade}}/{{lot_wise['procurement_channel']}}
+                        </ion-col>
+                        <ion-col>
+                          {{lot_wise.quantity}}&nbsp;{{lot_wise.unit}}
+                        </ion-col>
+                      </ion-row>
+                    </div>
+                  </ion-list>
+                </ion-card-content>
+              </span>
+            </ion-card>
+          </ion-list>
+        </ion-list>
+        <ion-list *ngSwitchCase="'product_segment'">
+          <ion-list lines="full">
+            <ion-card *ngFor="let storage of storages; let storage_index=index">
+              <ion-card-header style="background-color: tan;">
+                <ion-card-subtitle style="color: black;">
+                  <ion-row>
+                    <ion-col (click)="showStorageStock(storage_index)">
+                      {{storage.storage_name}}-{{storage.storage_section_name}}</ion-col>
+                    <ion-col (click)="showStorageStock(storage_index)" size="1">
+                      <ion-icon style="float:right; font-size: 19px"
+                        [name]="storage.show_list ?  'arrow-dropdown-circle': 'arrow-dropright-circle'"></ion-icon>
+                    </ion-col>
+                  </ion-row>
+                </ion-card-subtitle>
+              </ion-card-header>
+              <span *ngIf="storage.show_list">
+                <ion-list lines="inset">
+                  <ion-row style="text-align: left; color: #4a4abb;padding-left: 12px;">
+                    <ion-col>Product</ion-col>
+                    <ion-col>Batch</ion-col>
+                    <ion-col>Date</ion-col>
+                    <ion-col>Lot #</ion-col>
+                    <ion-col>Qty</ion-col>
+                  </ion-row>
+                </ion-list>
+                <ion-card-content style="padding: 0%">
+                  <ion-list *ngFor="let product_wise of storage_product[storage.id]; let storage_product_index=index"
+                    lines="inset">
+                    <ion-row style="text-align: left; font-size: small;">
+                      <ion-col>
+                        {{product_wise.batch_product_name}}
+                      </ion-col>
+                      <ion-col>
+                        {{product_wise.batch_code}}
+                      </ion-col>
+                      <ion-col>
+                        {{product_wise.product_manufactured_date | date: 'ddMMMyy'}}
+                      </ion-col>
+                      <ion-col>
+                        {{product_wise.storage_lot_lot_code}}
+                      </ion-col>
+                      <ion-col>
+                        {{product_wise.quantity}}&nbsp;{{product_wise.unit_name}}
+                      </ion-col>
+                    </ion-row>
+                  </ion-list>
+                </ion-card-content>
+              </span>
+            </ion-card>
+          </ion-list>
+        </ion-list>
+      </span>
+      <span *ngIf="selected_radio_value === 'product'">
+        <ion-list *ngSwitchCase="'procurement_segment'">
+          <ion-list lines="full">
+            <ion-card *ngFor="let procurement_crop of procurement_crops; let procurement_crop_index=index">
+              <ion-card-header style="background-color: tan;">
+                <ion-card-subtitle style="color: black;">
+                  <ion-row>
+                    <ion-col (click)="showProcurementCrop(procurement_crop_index)">
+                      {{procurement_crop.name}}</ion-col>
+                    <ion-col (click)="showProcurementCrop(procurement_crop_index)" size="1">
+                      <ion-icon style="float:right; font-size: 19px"
+                        [name]="procurement_crop.show_list ?  'arrow-dropdown-circle': 'arrow-dropright-circle'">
+                      </ion-icon>
+                    </ion-col>
+                  </ion-row>
+                </ion-card-subtitle>
+              </ion-card-header>
+              <span *ngIf="procurement_crop.show_list">
+                <ion-list lines="inset">
+                  <ion-row style="text-align: left; color: #4a4abb; padding-left: 12px;">
+                    <!-- <ion-col size="1"></ion-col> -->
+                    <ion-col size="3">Store/Sec</ion-col>
+                    <ion-col size="2">Proc</ion-col>
+                    <ion-col size="4">Lot#/Gr/ <span *ngIf="business_short_name ==='Onganic'">St</span><span
+                        *ngIf="business_short_name !=='Onganic'">Channel</span> </ion-col>
+                    <ion-col>Qty</ion-col>
+                  </ion-row>
+                </ion-list>
+                <ion-card-content style="padding: 0%">
+                  <ion-list
+                    *ngFor="let crop_wise of procurement_crop_wise[procurement_crop.name]; let crop_wise_index=index; let even_index=even"
+                    lines="inset">
+                    <div [style.background-color]="even_index ? '#e8e5e5': 'unset'">
+                      <ion-row style="text-align: left; font-size: small;">
+                        <ion-col>{{crop_wise.storage_name}}<br>{{crop_wise.storage_section_name}}</ion-col>
+                        <ion-col size="2" style="font-size: 12px">{{crop_wise.date_of_procurement | date : 'ddMMMyy'}}
+                        </ion-col>
+                        <ion-col size="4">
+                          <span
+                            style="font-weight: bold;">{{crop_wise.lot_code}}/{{crop_wise.grade}}/{{crop_wise['procurement_channel']}}</span>
+                          <span *ngIf="crop_wise['qr_code'] !== null" style="font-size: 11px;"><br>
+                            {{crop_wise['qr_code']}}</span>
+                        </ion-col>
+                        <ion-col>
+                          {{crop_wise.quantity}}&nbsp;{{crop_wise.unit}}
+                        </ion-col>
+                      </ion-row>
+                    </div>
+                  </ion-list>
+                </ion-card-content>
+              </span>
+            </ion-card>
+          </ion-list>
+        </ion-list>
+        <ion-list *ngSwitchCase="'product_segment'">
+          <ion-list lines="full">
+            <ion-card *ngFor="let product of products_list; let product_index=index">
+              <ion-card-header style="background-color: tan;">
+                <ion-card-subtitle style="color: black;">
+                  <ion-row>
+                    <ion-col (click)="showProducts(product_index)">
+                      {{product.name}}</ion-col>
+                    <ion-col (click)="showProducts(product_index)" size="1">
+                      <ion-icon style="float:right; font-size: 19px"
+                        [name]="product.show_list ?  'arrow-dropdown-circle': 'arrow-dropright-circle'"></ion-icon>
+                    </ion-col>
+                  </ion-row>
+                </ion-card-subtitle>
+              </ion-card-header>
+              <span *ngIf="product.show_list">
+                <ion-list lines="inset">
+                  <ion-row style="text-align: left; color: #4a4abb;padding-left: 12px;">
+                    <ion-col>Batch</ion-col>
+                    <ion-col>Store/Sec/Lot</ion-col>
+                    <ion-col>Qty</ion-col>
+                  </ion-row>
+                </ion-list>
+                <ion-card-content style="padding: 0%">
+                  <ion-list
+                    *ngFor="let processed_product of product_wise[product.name]; let processed_product_index=index"
+                    lines="inset">
+                    <ion-row style="text-align: left; font-size: small;">
+                      <ion-col>
+                        {{processed_product.batch_code}}<br>
+                        <span style='font-size: 12px;'>
+                          {{processed_product.product_manufactured_date | date: 'ddMMMyy'}}
+                        </span>
+                      </ion-col>
+                      <ion-col size="5">
+                        <span>
+                          {{processed_product.storage_lot_storage_section_storage_name | slice: 0:3}} -
+                          {{processed_product.storage_lot_storage_section_name}}<br>
+                          {{processed_product.storage_lot_lot_code}}
+                        </span>
+                      </ion-col>
+                      <ion-col>
+                        {{processed_product.quantity}}&nbsp;{{processed_product.unit_name}}
+                      </ion-col>
+                    </ion-row>
+                  </ion-list>
+                </ion-card-content>
+              </span>
+            </ion-card>
+          </ion-list>
+        </ion-list>
+      </span>
+    </div>
+  </ion-content>

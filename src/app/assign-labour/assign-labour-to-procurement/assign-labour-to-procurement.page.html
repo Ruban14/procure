@@ -1,0 +1,43 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>Add Fd Operation/ Labour</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <form [formGroup]="field_operation_form">
+      <ion-item>
+        <ion-label>Purpose</ion-label>
+        <ion-select formControlName="purpose_id" [interfaceOptions]="'Popover'" interface="popover" placeholder="Select One">
+          <ion-select-option *ngFor="let purpose of purpose_cvs" [value]="purpose.id">{{purpose.term}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label>Team</ion-label>
+        <ion-select formControlName="labour_team_id" [interfaceOptions]="'Popover'" interface="popover" placeholder="Select One">
+          <ion-select-option *ngFor="let labour_team of labour_teams" [value]="labour_team.id">{{labour_team.name}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label>Date</ion-label>
+        <ion-datetime formControlName="date" display-format="DD, MMM , YYYY"></ion-datetime>
+      </ion-item>
+    </form>
+    <ion-row>
+      <ion-col>
+        <ion-button color="Medium" (click)="closeModalController()">
+            <ion-icon name="arrow-round-back"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button (click)="mapLabourTeamToProcurement()">
+          Assign
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-content>
+  

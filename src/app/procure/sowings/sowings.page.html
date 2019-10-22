@@ -1,0 +1,277 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>Sowings</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="onHomeIconClicked()">
+          <ion-icon slot="icon-only" name="home"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-list *ngIf="farmer != null" style="margin-top: -2.5%">
+      <ion-item-sliding class="sliding-background" style="background-color: #9e9e9e; padding: 10px">
+        <ion-item style="--background: #9e9e9e;" lines="none">
+          <ion-avatar slot="start">
+            <img src="assets/dashboard_icon/farmer.svg">
+          </ion-avatar>
+          <ion-label style="color:white; font-size: 15px;">{{farmer['firstname']}}<br><span>FID-{{farmer['id']}}</span>
+          </ion-label>
+  
+          <!--<ion-icon name="information-circle-outline" ></ion-icon>-->
+          <!--<ion-icon name="cash" (click)="farmer_overall_payment_information()"></ion-icon>-->
+  
+          <ion-fab vertical="center" horizontal="end">
+            <ion-fab-button size="small" color="medium">
+              <ion-icon name="more">
+              </ion-icon>
+            </ion-fab-button>
+            <ion-fab-list side="start">
+              <ion-fab-button color="warning" (click)="farmer_overall_payment_information()">
+                <ion-icon name="cash" style="color:black"></ion-icon>
+              </ion-fab-button>
+              <ion-fab-button color="warning" (click)="register_farmer_payment(farmer['id'])">
+                <ion-icon src="assets/dashboard_icon/money-sack.svg" style="color:black"></ion-icon>
+              </ion-fab-button>
+            </ion-fab-list>
+          </ion-fab>
+  
+        </ion-item>
+  
+        <ion-item-options side="start">
+          <ion-item-option class="background-option">
+            <a class="button" href="tel:{{farmer['phone']}}">
+              <ion-icon class="icon-slide" name="call"></ion-icon>
+            </a>
+          </ion-item-option>
+          <ion-item-option>
+            <a class="button" href="http://maps.google.com/?q={{farmer['latitude']+','+farmer['longitude']}}">
+              <!-- <a class="button" href="geo:?q={{farmer['latitude']+','+farmer['longitude']}}"> -->
+              <ion-icon class="icon-slide" name="pin"></ion-icon>
+            </a>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+    <span *ngIf="sowings.length != 0">
+      <ion-card *ngFor="let sowing of sowings; let sowing_index = index" style="margin: 0px; padding: 0px">
+        <ion-card-header
+          [ngStyle]="{'background-color': selected_sowing_id_for_procurement_history == sowing['id']? '#c1c4cd': ''} ">
+          <ion-row>
+            <!--<ion-col size="2">-->
+            <!--<ion-fab vertical="center" horizontal="center">-->
+            <!--<ion-fab-button mini color="light">P</ion-fab-button>-->
+            <!--<ion-fab-list side="end">-->
+            <!--<ion-fab-button color="warning" (click)="getSowingProcurementHistory(sowing['id'])">PH</ion-fab-button>-->
+            <!--&lt;!&ndash;<ion-fab-button color="medium"&ndash;&gt;-->
+            <!--&lt;!&ndash;href="http://maps.google.com/?q={{sowing['latitude']+','+sowing['longitude']}}">&ndash;&gt;-->
+  
+            <!--&lt;!&ndash;<ion-icon name="pin"></ion-icon>&ndash;&gt;-->
+            <!--&lt;!&ndash;</ion-fab-button>&ndash;&gt;-->
+            <!--&lt;!&ndash;<ion-fab-button color="warning">R</ion-fab-button>&ndash;&gt;-->
+            <!--</ion-fab-list>-->
+            <!--</ion-fab>-->
+            <!--</ion-col>-->
+            <ion-col (click)="navPage('vehicle-list/', sowing.id, sowing.instance_crop, sowing)">
+              {{sowing_index + 1}}. <span style="font-weight: bold;">{{sowing.instance_crop_name }} -
+                {{sowing.variety}}</span> <br>
+              <div style="padding-left: 4%">
+                <ion-icon name="arrow-dropright" style="float: right; font-size: 25px;"></ion-icon>
+                {{sowing.name}} - {{sowing.village}}<br>
+                <span>({{sowing.sowingdate_proposed | timeDiffInYears}}) - </span>
+                <span>({{sowing.sowingdate_proposed | procure}});</span> &nbsp;
+                <span style="font-style: italic;">{{sowing['area'] | number: '.2'}} acre</span>
+              </div>
+            </ion-col>
+  
+            <!--<ion-col size="2">-->
+            <!--<ion-fab vertical="center" horizontal="center">-->
+            <!--<ion-fab-button mini color="light">H</ion-fab-button>-->
+            <!--<ion-fab-list side="start">-->
+            <!--<ion-fab-button color="warning" (click)="showHarvestHistory(sowing['id'])">HH</ion-fab-button>-->
+            <!--<ion-fab-button color="medium" (click)="presentHarvestModal(sowing['id'])">HR</ion-fab-button>-->
+            <!--</ion-fab-list>-->
+            <!--</ion-fab>-->
+            <!--</ion-col>-->
+          </ion-row>
+        </ion-card-header>
+  
+        <!--BUTTON ROW-->
+        <ion-card-content>
+          <ion-row>
+  
+            <!--HARVEST-->
+            <ion-col size="2">
+              <ion-fab vertical="center" horizontal="center"
+                *ngIf="show_sowing_fab_button === 'harvest' || show_sowing_fab_button === null">
+                <ion-fab-button size="small" color="medium" (click)="fab_clicked('harvest')">
+                  <ion-icon src="assets/dashboard_icon/harvest.svg" style="color:black">
+                  </ion-icon>
+                </ion-fab-button>
+                <ion-fab-list side="top">
+                  <ion-fab-button color="warning" (click)="showHarvestHistory(sowing['id'])">
+                    <ion-icon src="assets/dashboard_icon/history-svgrepo-com.svg" style="color:black"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab-list>
+                <ion-fab-list side="end">
+                  <ion-fab-button color="warning" (click)="presentHarvestModal(sowing['id'])">
+                    <ion-icon name="add-circle" style="color:black"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab-list>
+              </ion-fab>
+            </ion-col>
+  
+            <!--PROCUREMENT-->
+            <ion-col size="2" offset="1">
+              <ion-fab vertical="center" horizontal="center"
+                *ngIf="show_sowing_fab_button === 'procure' || show_sowing_fab_button === null">
+                <ion-fab-button size="small" color="medium" (click)="fab_clicked('procure')">
+                  <ion-icon src="assets/dashboard_icon/procure.svg" style="color:black"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-list side="top">
+                  <ion-fab-button color="warning" (click)="getSowingProcurementHistory(sowing['id'])">
+                    <ion-icon src="assets/dashboard_icon/history-svgrepo-com.svg" style="color:black"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab-list>
+                <ion-fab-list side="end">
+                  <ion-fab-button color="warning"
+                    (click)="navPage('vehicle-list/', sowing.id, sowing.instance_crop, sowing)">
+                    <ion-icon name="add-circle" style="color:black"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab-list>
+              </ion-fab>
+            </ion-col>
+  
+            <!--BUSINESS TO COST-->
+            <ion-col size="2" offset="1">
+              <ion-fab vertical="center" horizontal="center"
+                *ngIf="show_sowing_fab_button === 'business_to_cost' || show_sowing_fab_button === null">
+                <ion-fab-button size="small" color="medium" (click)="fab_clicked('business_to_cost')">
+                  <ion-icon name="cash" style="color:black" ></ion-icon>
+                </ion-fab-button>
+                <ion-fab-list side="end">
+                  <ion-fab-button size="small" color="warning" (click)="presentLabourProcurementMapModal(sowing['id'], 'Sowing')">
+                    <ion-icon name="add-circle" style="color:black"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab-list>
+                <ion-fab-list side="top">
+                  <ion-fab-button size="small" color="warning" (click)="farmer_overall_payment_information()">
+                    <ion-icon src="assets/dashboard_icon/history-svgrepo-com.svg" style="color:black"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab-list>
+              </ion-fab>
+            </ion-col>
+  
+            <!--CONTACT-->
+            <ion-col size="2" offset="1">
+  
+              <ion-fab vertical="center" horizontal="center">
+                <ion-fab-button size="small" color="medium"
+                  href="http://maps.google.com/?q={{sowing['latitude']+','+sowing['longitude']}}"
+                  *ngIf="show_sowing_fab_button === null">
+                  <ion-icon name="pin" style="color:black"></ion-icon>
+                </ion-fab-button>
+              </ion-fab>
+            </ion-col>
+          </ion-row>
+          <ion-row text-center style="margin-top: 10px; font-size: 13px; font-style: italic">
+            <ion-col size="2">
+              <span *ngIf="show_sowing_fab_button === 'harvest' || show_sowing_fab_button === null"> Harv </span>
+            </ion-col>
+            <ion-col size="2" offset=1>
+              <span *ngIf="show_sowing_fab_button === 'procure' || show_sowing_fab_button === null">Proc</span>
+            </ion-col>
+            <ion-col size="2" offset=1>
+              <span *ngIf="show_sowing_fab_button === 'business_to_cost' || show_sowing_fab_button === null">Expe</span>
+            </ion-col>
+            <ion-col size="2" offset=1>
+              <span *ngIf="show_sowing_fab_button === null">GPS</span>
+            </ion-col>
+          </ion-row>
+          <!--<br>-->
+  
+        </ion-card-content>
+      </ion-card>
+    </span>
+  
+    <!--PROCUREMENT HISTORY-->
+    <span *ngIf="procurements | validate : 'is_not_empty_dict'">
+      <span *ngFor="let procurement of procurements; let procurement_index=index;">
+        <h3 *ngIf="procurement_index === 0" text-center>Procurement History</h3>
+        <ion-card>
+          <ion-card-header>
+            <ion-row>
+              <ion-col style="font-style: italic; font-weight: bold">
+                {{procurement.date_of_procurement |date : 'dd-MMM-yyyy'}}
+              </ion-col>
+              <ion-col>
+                {{procurement.labour_team_name}}
+              </ion-col>
+              <ion-col size="2">
+                <ion-fab vertical="center" horizontal="end">
+                  <ion-fab-button color="light" size="small">
+                    <ion-icon name="more"></ion-icon>
+                  </ion-fab-button>
+                  <ion-fab-list side="start">
+                    <ion-fab-button color="medium"
+                      (click)="presentLabourProcurementMapModal(procurement.id, 'Procurement')">
+                      <ion-icon src="assets/dashboard_icon/cost.svg"></ion-icon>
+                    </ion-fab-button>
+                  </ion-fab-list>
+                </ion-fab>
+              </ion-col>
+            </ion-row>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-row>
+              <ion-col size="3" style="overflow: hidden">{{procurement.grade_name}}</ion-col>
+              <ion-col size="1">-</ion-col>
+              <ion-col size="4">{{procurement.quantity}}
+                <span style="font-weight: bold; font-style: italic">{{procurement.unit_name}}</span> @
+                <span style="font-weight: bold; font-style: italic">{{procurement.unit_price}}</span> Rs
+              </ion-col>
+              <ion-col size="1">=</ion-col>
+              <ion-col size="3"><span
+                  style="font-weight: bold; font-style: italic">{{procurement.quantity * procurement.unit_price}}</span>
+                Rs</ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col style="font-style: italic; font-size: small; font-weight: bold">{{procurement.notes}}</ion-col>
+            </ion-row>
+  
+          </ion-card-content>
+        </ion-card>
+      </span>
+    </span>
+  
+    <!--HARVEST HISTORY-->
+    <span *ngFor="let harvest of harvests; let harvests_index=index;">
+      <span *ngIf="harvests_index === 0">
+        <h3 text-center>Harvest History</h3>
+  
+        <ion-row style="background-color: #ffcccb">
+          <ion-col size="1"></ion-col>
+          <ion-col size="3">Date</ion-col>
+          <ion-col>Quantity</ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+      </span>
+      <ion-row style="margin-top: 15px">
+        <ion-col size="1">{{harvests_index + 1}}</ion-col>
+        <ion-col size="3">{{harvest.date | date: 'dd-MMM-yy'}}</ion-col>
+        <ion-col>{{harvest.value}} {{harvest.unit}}</ion-col>
+        <ion-col>
+          <ion-fab vertical="center" horizontal="center">
+            <ion-fab-button size="small" color="medium" (click)="presentLabourProcurementMapModal(harvest.id, 'Harvest')">
+              <ion-icon src="assets/dashboard_icon/cost.svg"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+        </ion-col>
+      </ion-row>
+    </span>
+  </ion-content>
+  

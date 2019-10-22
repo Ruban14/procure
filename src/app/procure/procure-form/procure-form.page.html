@@ -1,0 +1,156 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>Procure</ion-title>
+      <ion-buttons slot="primary">
+        <ion-button (click)="onHomeIconClicked()">
+          <ion-icon slot="icon-only" name="home"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-list *ngIf="farmer != null" style="background: #9e9e9e" lines="none">
+      <ion-item-sliding class="sliding-background">
+        <ion-item style="--background : #9e9e9e" lines="none">
+          <ion-avatar slot="start">
+            <img src="assets/dashboard_icon/farmer.svg">
+          </ion-avatar>
+          <ion-label style="color: white; font-size: 15px;">{{farmer['firstname']}}<br><span>FID-{{farmer['id']}}</span></ion-label>
+          <ion-label *ngIf="sowing != null" style="color: white; font-size: 15px;">
+            {{sowing['name']}}<br>SID-{{sowing['id']}}&nbsp;{{sowing['villgae']}}<br>
+            <span *ngIf="vehicle != null" style="font-size: small; color: white;">
+              <ion-icon style="font-size: 16px; color: black;" name="bus"></ion-icon>
+              {{vehicle['vehicle_license']}}
+            </span>
+          </ion-label>
+        </ion-item>
+        <ion-item-options side="start">
+          <ion-item-option>
+            <a class="button" href="tel:{{farmer['phone']}}">
+              <ion-icon class="icon-slide" name="call"></ion-icon>
+            </a>
+          </ion-item-option>
+          <ion-item-option>
+            <a class="button" href="http://maps.google.com/?q={{farmer['latitude']+','+farmer['longitude']}}">
+              <!-- <a class="button" href="geo:?q={{farmer['latitude']+','+farmer['longitude']}}"> -->
+              <ion-icon class="icon-slide" name="pin"></ion-icon>
+            </a>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+    <span *ngIf="procure_form_array.length != 0;">
+      <ion-row text-center style="border-bottom: 1px solid black; background-color: tan;">
+        <ion-col size="1">#</ion-col>
+        <ion-col>Grade</ion-col>
+        <ion-col>Quantity</ion-col>
+        <ion-col>Proc.<ion-icon name="calendar" style="font-size: 17px"></ion-icon>
+        </ion-col>
+        <ion-col size="1"></ion-col>
+      </ion-row>
+      <span *ngFor="let form of procure_form_array;let form_index=index; let form_last=last">
+        <ion-row text-center style="background-color: wheat;">
+          <ion-col (click)="editProcurementEntry(form_index)" size="1">{{form_index + 1}}</ion-col>
+          <ion-col (click)="editProcurementEntry(form_index)">{{all_cvs['grades'][form['grade']] | slice: 0:18}}</ion-col>
+          <ion-col (click)="editProcurementEntry(form_index)">{{form['quantity']}}&nbsp;{{all_cvs['units'][form['unit']]}}</ion-col>
+          <ion-col (click)="editProcurementEntry(form_index)">{{form['date_of_procurement'] | date: 'dd-MMM'}}</ion-col>
+          <ion-col size="1" (click)="deleteProcurementEntry(form_index)">
+            <ion-icon name="trash"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="form_last">
+          <ion-col></ion-col>
+          <ion-col>
+            <ion-button (click)="uploadProcurements()">Record Procurements</ion-button>
+          </ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+      </span>
+    </span>
+  
+  
+    <form [formGroup]="procure_form">
+      <ion-row>
+        <ion-col text-center>Quantity</ion-col>
+        <ion-col text-center>Unit</ion-col>
+        <ion-col text-center>Price</ion-col>
+      </ion-row>
+      <ion-row text-center>
+        <ion-col>
+          <ion-card style="border-radius: 30px; height: 37px">
+            <input type="number" formControlName="quantity" class="form-input" required>
+          </ion-card>
+        </ion-col>
+        <ion-col>
+          <ion-card style="border-radius: 30px; height: 37px">
+            <select formControlName="unit" class="form-input">
+              <option *ngFor="let unit_id of unit_ids; let unit_index = index" [value]="unit_id" required>
+                {{all_cvs['units'][unit_id]}}
+              </option>
+            </select>
+          </ion-card>
+        </ion-col>
+        <ion-col>
+          <ion-card style="border-radius: 30px; height: 37px">
+            <input type="number" formControlName="unit_price" class="form-input" required>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+  
+  
+      <ion-row>
+        <ion-col text-center>Grade</ion-col>
+        <ion-col text-center *ngIf="business_short_name === 'Onganic'" >Status</ion-col>
+        <ion-col text-center *ngIf="business_short_name !== 'Onganic'" >Channel</ion-col>
+      </ion-row>
+      <ion-row text-center>
+        <ion-col>
+          <ion-card style="border-radius: 30px; height: 37px">
+            <select formControlName="grade" class="form-input">
+              <option *ngFor="let grade_id of grad_ids;" [value]="grade_id" text-center required>{{all_cvs['grades'][grade_id]}}
+              </option>
+            </select>
+          </ion-card>
+        </ion-col>
+        <ion-col>
+          <ion-card style="border-radius: 30px; height: 37px">
+            <select formControlName="channel" class="form-input">
+              <option *ngFor="let channel_id of channel_ids; let channel_index = index" [value]="channel_id" required>
+                {{all_cvs['channels'][channel_id]}}
+              </option>
+            </select>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+  
+      <ion-row>
+        <ion-col text-center>Harvested On</ion-col>
+        <ion-col text-center>Procured On</ion-col>
+      </ion-row>
+      <ion-row text-center>
+        <ion-col>
+          <ion-card style="border-radius: 30px; height: 37px">
+            <input formControlName="date_of_harvest" class="form-input" type="date" required>
+          </ion-card>
+        </ion-col>
+        <ion-col>
+          <ion-card style="border-radius: 30px; height: 37px">
+            <input formControlName="date_of_procurement" class="form-input" type="date" required>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+  
+      <ion-card style="border-radius: 30px">
+        <textarea class="form-input" style="height: 100px; padding: 15px;" formControlName="notes" placeholder="Notes"></textarea>
+      </ion-card>
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="logForm()" [color]="procure_form.valid ? 'primary' : 'danger'" [disabled]="!procure_form.valid">
+          <ion-icon name="checkmark"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </form>
+  </ion-content>

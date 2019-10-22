@@ -1,0 +1,32 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>odo</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <form [formGroup]="odo_form">
+      <ion-list lines="inset" inset="true">
+        <ion-item>
+          <ion-label>Start</ion-label>
+          <ion-input type="number" formControlName="start"></ion-input>
+          <!--<span style="color: red; font-style: italic; font-size: small">{{getError(odo_form.controls.start.errors)}}</span>-->
+          <!--{{getError(odo_form.controls.start.error)}}-->
+        </ion-item>
+        <div style="font-style: italic; font-size: small" [ngStyle]="{'color': odo_form.controls.start.valid? 'green': 'red'}">{{odo_form.controls.start.errors | dynamicFormError}}</div>
+        <ion-item>
+          <ion-label>End</ion-label>
+          <ion-input type="number" formControlName="end"></ion-input>
+          <!--<ion-input type="number" [class.invalid]="!odo_form.controls.end.valid" formControlName="end"></ion-input>-->
+  
+        </ion-item>
+        <div style="font-style: italic; font-size: small" [ngStyle]="{'color': (odo_form.controls.end.errors | dynamicFormError) === 'valid'? 'green': 'red'}">{{odo_form.controls.end.errors | dynamicFormError}}</div>
+      </ion-list>
+    </form>
+  
+    <!--{{odo_form.valid}}-->
+  
+  </ion-content>

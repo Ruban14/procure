@@ -1,0 +1,44 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>Record Harvest</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <form [formGroup]="harvest_form">
+      <ion-list lines="inset" inset="true">
+        <ion-item>
+          <ion-label>Unit</ion-label>
+          <!--<ion-input formControlName="type"></ion-input>-->
+          <ion-select interface="popover" formControlName="unit">
+            <ion-select-option *ngFor="let unit of units" [value]="unit.id">{{unit.term}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label>Date</ion-label>
+          <ion-datetime display-format="DD, MMM , YYYY" formControlName="date_of_harvest"></ion-datetime>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label>Quantity</ion-label>
+          <ion-input type="number" formControlName="value"></ion-input>
+        </ion-item>
+      </ion-list>
+    </form>
+  
+  
+    <ion-row>
+      <ion-col>
+        <ion-button color="Medium" (click)="closePopup()">
+            <ion-icon name="arrow-round-back"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button [disabled]="!harvest_form.valid" (click)="logHarvest()">
+          Add
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-content>
+  

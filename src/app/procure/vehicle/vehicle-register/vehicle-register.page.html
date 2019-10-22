@@ -1,0 +1,54 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>Register Vehicle</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <h5>Register New Vehicle</h5>
+    <span class="span-page-title-second">into the fleet</span>
+    <form [formGroup]="register_vehicle" (ngSubmit)="onRegisterVehicle()">
+      <ion-row>
+        <ion-col size="6">
+          <ion-item>
+            <ion-label position="floating">Vehicle Number</ion-label>
+            <ion-input type="text" formControlName="license" maxlength="13" required></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-item>
+            <ion-label position="floating">Vehicle Type</ion-label>
+            <ion-select formControlName="type" interface="popover">
+              <ion-select-option *ngFor="let vehicle_type of vehicle_types" [value]="vehicle_type" required>{{vehicle_type.term}} - {{vehicle_type.capacity_in_kgs}} Kgs</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6">
+          <ion-item>
+            <ion-label position="floating">Contact Person</ion-label>
+            <ion-input type="text" formControlName="contact_person" required></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-item>
+            <ion-label position="floating">Contact Number</ion-label>
+            <ion-input type="tel" formControlName="contact_phone" maxlength="10" required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col></ion-col>
+        <ion-col>
+          <ion-button class="activated" type="submit" [color]="register_vehicle.valid ? 'success' : 'danger'"
+            [disabled]="!register_vehicle.valid">Register</ion-button>
+        </ion-col>
+        <ion-col></ion-col>
+      </ion-row>
+    </form>
+  </ion-content>
+  

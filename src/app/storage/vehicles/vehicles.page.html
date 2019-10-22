@@ -1,0 +1,200 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>Store Procurements</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-slides #slider [options]="slideOpts" style="width: 100%; height: 100%;">
+      <ion-slide style="overflow: auto;">
+        <ion-list lines="full">
+          <ion-list-header>
+            <ion-label style="font-size: 20px; color: brown; white-space: normal; text-align: center;">Select
+              Procurements to Store<br><span style="color: black; font-size: medium;font-style: italic;">move procurements from truck to storage</span>
+            </ion-label>
+            <!-- <span style="float: right; font-size: 12px; padding-right: 10px; padding-top: 17%">stock list</span>
+            <ion-fab vertical="start" horizontal="end">
+              <ion-fab-button mini color="warning" (click)="currentStock()">
+                <ion-icon name="list-box"></ion-icon>
+              </ion-fab-button>
+            </ion-fab> -->
+          </ion-list-header>
+          <ion-row>
+            <ion-col></ion-col>
+            <ion-col>
+              <ion-button color="success" (click)="presentModal()">Store</ion-button>
+            </ion-col>
+            <ion-col></ion-col>
+          </ion-row>
+  
+          <ion-card *ngFor="let truck of list_of_trucks; let truck_index=index">
+            <ion-card-header style="background-color: tan;">
+              <ion-card-subtitle style="color: black;">
+                <ion-row>
+                  <ion-col size="1">
+                    <ion-checkbox style="float: left;" color="secondary" (ionChange)="getAllProcurementbyTrip(truck.pickup_trip_id, truck.show_list)"
+                      [(ngModel)]="truck.truck_checked"></ion-checkbox>
+                  </ion-col>
+                  <ion-col (click)="showProcurement(truck_index)" size="6">{{truck.license}}</ion-col>
+                  <ion-col (click)="showProcurement(truck_index)" size="4">{{truck.quantity}}</ion-col>
+                  <ion-col (click)="showProcurement(truck_index)" size="1">
+                    <ion-icon style="float:right; font-size: 19px" [name]="truck.show_list ?  'arrow-dropdown-circle': 'arrow-dropright-circle'"></ion-icon>
+                  </ion-col>
+                </ion-row>
+              </ion-card-subtitle>
+            </ion-card-header>
+            <span *ngIf="truck.show_list">
+              <ion-list lines="inset">
+                <ion-row style="text-align: center; color: #bf710a;">
+                  <ion-col size="1"></ion-col>
+                  <ion-col>GRN/Farmer</ion-col>
+                  <ion-col size="3">Crop/Gr/<span *ngIf="business_short_name === 'Onganic'">St</span><span *ngIf="business_short_name !== 'Onganic'">Channel</span></ion-col>
+                  <ion-col size="3">Quantity</ion-col>
+                </ion-row>
+              </ion-list>
+              <ion-card-content>
+                <ion-list *ngFor="let trip of pickup_trip[truck.pickup_trip_id]; let procurement_index=index" lines="inset">
+                  <ion-row style="text-align: center;">
+                    <ion-col size="1" style="padding: 0">
+                      <ion-checkbox style="float: left;" color="secondary" (ionChange)="appendProcurementIds(trip)"
+                        [(checked)]="truck.truck_checked"></ion-checkbox>
+                    </ion-col>
+                    <ion-col size="5" style="text-align: left;">
+                      <span *ngIf="trip['qr_code'] !== null">{{trip['qr_code'] | slice: 0:11}}<br>{{trip['qr_code'] | slice: -7}}<br></span>
+                      {{trip['farmer']}}
+                    </ion-col>
+                    <ion-col size="4">
+                      <span style="font-style: italic">{{trip['instance_crop_name']}}</span>/ {{trip['grade']}}/
+                      {{trip['channel']}}
+                    </ion-col>
+                    <ion-col size="2">{{trip['quantity']}} {{trip['unit']}}</ion-col>
+                  </ion-row>
+                </ion-list>
+              </ion-card-content>
+            </span>
+          </ion-card>
+          <ion-row>
+            <ion-col></ion-col>
+            <ion-col>
+              <ion-button color="success" (click)="presentModal()">Store</ion-button>
+            </ion-col>
+            <ion-col></ion-col>
+          </ion-row>
+        </ion-list>
+      </ion-slide>
+      <ion-slide style="overflow: auto;">
+        <ion-list lines="full">
+          <ion-list-header (click)="slideTo(0)">
+            <ion-button>
+              <ion-icon style="font-size: 25px;" name="arrow-back"></ion-icon>
+            </ion-button>
+            <ion-label style="font-size: 20px; color: brown; white-space: normal;">Select Storage Stock to
+              Include</ion-label>
+          </ion-list-header>
+          <ion-card *ngFor="let storage of list_of_storage; let storage_index=index">
+            <ion-card-header style="background-color: tan;">
+              <ion-card-subtitle style="color: black;">
+                <ion-row>
+                  <!-- <ion-col size="1">
+                    <ion-checkbox style="float: left;" color="secondary" (ionChange)="getAllProcurementbyStorage(storage.storage_section_id, storage.show_list)"
+                      [(ngModel)]="storage.storage_checked"></ion-checkbox>
+                  </ion-col> -->
+                  <ion-col (click)="showStorageStock(storage_index)" size="6">{{storage.storage_name}}-{{storage.storage_section_name}}</ion-col>
+                  <ion-col (click)="showStorageStock(storage_index)" size="4">{{storage.quantity}}</ion-col>
+                  <ion-col (click)="showStorageStock(storage_index)" size="1">
+                    <ion-icon style="float:right; font-size: 19px" [name]="storage.show_list ?  'arrow-dropdown-circle': 'arrow-dropright-circle'"></ion-icon>
+                  </ion-col>
+                </ion-row>
+              </ion-card-subtitle>
+            </ion-card-header>
+            <span *ngIf="storage.show_list">
+              <ion-list lines="inset">
+                <ion-row style="text-align: center; color: tan;">
+                  <!-- <ion-col size="1"></ion-col> -->
+                  <ion-col>GRN/Farmer</ion-col>
+                  <ion-col>Lot#/Grade/ <span *ngIf="business_short_name==='Onganic'">Status</span><span *ngIf="business_short_name !=='Onganic'">Channel</span> </ion-col>
+                  <ion-col>Quantity</ion-col>
+                </ion-row>
+              </ion-list>
+              <ion-card-content>
+                <ion-list *ngFor="let lot_wise of storage_wise_data[storage.storage_section_id]; let storage_procurement_index=index"
+                  lines="inset">
+                  <ion-row style="text-align: center;">
+                    <!-- <ion-col size="1">
+                      <ion-checkbox style="float: left;" color="secondary" (ionChange)="appendProcurementIds(lot_wise.procurement_id, edit_quantity_storage[storage_index][storage_procurement_index]['quantity'], lot_wise.instance_crop, lot_wise.grade)"
+                        [(checked)]="storage.storage_checked"></ion-checkbox>
+                    </ion-col> -->
+                    <ion-col>
+                      <span *ngIf="lot_wise['qr_code'] !== null">{{lot_wise['qr_code']}}<br></span>
+                      {{lot_wise.farmer | titlecase}}
+                    </ion-col>
+                    <ion-col>
+                      {{lot_wise.lot_code}}/{{lot_wise.grade}}<br>
+                      {{lot_wise['procurement_channel']}}
+                    </ion-col>
+                    <ion-col>
+                      {{lot_wise.quantity}}&nbsp;{{lot_wise.unit}}
+                    </ion-col>
+                  </ion-row>
+                </ion-list>
+              </ion-card-content>
+            </span>
+          </ion-card>
+        </ion-list>
+        <ion-list *ngIf="processed_product_store_details != null">
+          <h6 style="text-align: center;">Processed Product Storage</h6>
+          <ion-card *ngFor="let processed_store of processed_product_store_details['storages']; let processed_store_index=index">
+            <ion-card-header style="background-color: tan;">
+              <ion-card-subtitle style="color: black;">
+                <ion-row>
+                  <!-- <ion-col size="1">
+                    <ion-checkbox style="float: left;" color="secondary" (ionChange)="getAllProcurementbyStorage(storage.storage_section_id, storage.show_list)"
+                      [(ngModel)]="storage.storage_checked"></ion-checkbox>
+                  </ion-col> -->
+                  <ion-col (click)="showProcessedStoreStock(processed_store_index)">{{processed_store.storage_name}}-{{processed_store.storage_section_name}}</ion-col>
+                  <ion-col (click)="showProcessedStoreStock(processed_store_index)" size="1">
+                    <ion-icon style="float:right; font-size: 19px" [name]="processed_store.show_list ?  'arrow-dropdown-circle': 'arrow-dropright-circle'"></ion-icon>
+                  </ion-col>
+                </ion-row>
+              </ion-card-subtitle>
+            </ion-card-header>
+            <span *ngIf="processed_store.show_list">
+              <ion-list lines="inset" style="padding-top: 5px;">
+                <ion-row style="text-align: left; padding-left: 8px; color: #906731;">
+                  <!-- <ion-col size="1"></ion-col> -->
+                  <ion-col>Processed Product/Date</ion-col>
+                  <ion-col>Quantity</ion-col>
+                  <ion-col>Lot #</ion-col>
+                  <ion-col>Batch</ion-col>
+                </ion-row>
+              </ion-list>
+              <ion-card-content>
+                <ion-list *ngFor="let product of processed_product_store_details['section_products'][processed_store.storage_section_id]['product_name']; let product_index=index"
+                          lines="inset">
+                  <ion-list-header style="padding: 0%; margin: 0%;"><span style="font-size: 15px; font-weight: bold; color: teal">End Product: <span style="font-style: italic;">{{product}}</span></span></ion-list-header>
+                  <ion-row style="text-align: left; font-size: small;" *ngFor="let product_lot_wise of processed_product_store_details['section_products'][processed_store.storage_section_id][product]; let product_lot_index=index;">
+                    <!-- <ion-col size="1">
+                      <ion-checkbox style="float: left;" color="secondary" (ionChange)="appendProcurementIds(lot_wise.procurement_id, edit_quantity_storage[storage_index][storage_procurement_index]['quantity'], lot_wise.instance_crop, lot_wise.grade)"
+                        [(checked)]="storage.storage_checked"></ion-checkbox>
+                    </ion-col> -->
+                    <ion-col>{{product_lot_wise.storage_lot_processed_product_product}}<br>
+                      {{product_lot_wise.product_manufactured_date | date: 'dd-MMM-yy'}}
+                    </ion-col>
+                    <ion-col>{{product_lot_wise.quantity | number : '.2'}}<br>({{product_lot_wise.unit_name}})</ion-col>
+                    <ion-col>
+                      {{product_lot_wise.storage_lot_lot_code}}
+                    </ion-col>
+                    <ion-col>{{product_lot_wise.batch_code}}</ion-col>
+                  </ion-row>
+                </ion-list>
+              </ion-card-content>
+            </span>
+          </ion-card>
+        </ion-list>
+      </ion-slide>
+    </ion-slides>
+  </ion-content>
+  

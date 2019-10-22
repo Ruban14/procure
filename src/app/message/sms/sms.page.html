@@ -1,0 +1,63 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>{{popup_type | uppercase}}</ion-title>
+      <ion-buttons slot="primary">
+        <ion-button (click)="closeModalControl()">
+          <ion-icon slot="icon-only" color="warning" name="close-circle-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <span *ngIf="popup_type == 'sms'">
+      <h3 style="font-style: italic" text-center>Type and send the message</h3>
+      <div padding style="margin-top: 8%">
+        <ion-textarea style="border: 1px solid black; height: 50%; border-radius: 5px" placeholder="Message" #message>
+  
+        </ion-textarea>
+        <ion-row text-center>
+          <ion-col>
+            <ion-button (click)="closeModalControl()">Close</ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button (click)="sendSms(message.value)">Send</ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
+    </span>
+    <span *ngIf="popup_type == 'invite'">
+      <ion-fab vertical="top" horizontal="end">
+        <ion-fab-button size="small" (click)="onInviteClicked()">
+          <ion-icon name="send"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+      <ion-list>
+        <ion-radio-group [(ngModel)]="selected_invite">
+          <ion-list-header>
+            Invite List
+          </ion-list-header>
+          <span *ngFor="let invite of invite_list; let invite_index=index;">
+  
+            <ion-item (click)="showInvite(invite_index)">
+              <ion-label style="white-space: normal;">{{invite['title']}}&nbsp;{{invite['date'] | date: 'dd-MMM-yy'}}</ion-label>
+              <ion-radio style="margin: 8px 15px 8px 5px" slot="start" [value]="invite"></ion-radio>
+            </ion-item>
+  
+            <span *ngIf="selected_index === invite_index">
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-subtitle>Organizer: <a href="tel: {{invite['organizer_phone']}}">{{invite['organizer_name'] |
+                      titlecase}}</a>, Host: <a href="tel:{{invite['host_phone']}}">{{invite['host_name']}}</a></ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                  <p style="text-align: justify;">{{invite['description']}}</p>
+                </ion-card-content>
+              </ion-card>
+            </span>
+          </span>
+  
+        </ion-radio-group>
+      </ion-list>
+    </span>
+  </ion-content>

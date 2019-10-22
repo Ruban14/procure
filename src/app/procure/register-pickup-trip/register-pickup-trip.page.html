@@ -1,0 +1,209 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>Manage</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+  
+    <!-- <ion-card>
+      <h3 style="margin-left: 6px">Assign Pickup Vehicle</h3>
+      <form [formGroup]="register_pickup" (ngSubmit)="onRegisterPickup()">
+        <ion-row>
+          <ion-col>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Vehicle</ion-label>
+                  <ion-select formControlName="vehicle_id" interface="popover">
+                    <ion-select-option *ngFor="let vehicle of vehicles" [value]="vehicle.id" required>{{vehicle.license}}</ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col size="2" style="margin-top: 7%;">
+                <ion-button size="small" (click)="onAddClicked()">
+                  <ion-icon slot="icon-only" name="add"></ion-icon>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Start Time</ion-label>
+              <ion-datetime display-format="DD-MMM-YY HH:mm" picker-format="DD-MMM-YY HH:mm" formControlName="start_time"
+                required></ion-datetime>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col></ion-col>
+          <ion-col>
+            <ion-button class="activated" type="submit" [color]="register_pickup.valid ? 'success' : 'danger'" [disabled]="!register_pickup.valid">Register</ion-button>
+          </ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+      </form>
+    </ion-card>
+    <ion-card>
+      <h3 style="margin-left: 6px">Register New Labour Team</h3>
+    </ion-card> -->
+  
+    <ion-segment [(ngModel)]="segment_type" (ionChange)="onSegmentChanged()">
+      <ion-segment-button value="pick-up" class="color-segment" checked>
+        Pick-up Trip
+      </ion-segment-button>
+      <ion-segment-button value="labour" class="color-segment">
+        Labour Team
+      </ion-segment-button>
+      <ion-segment-button value="storage" class="color-segment">
+        Storage
+      </ion-segment-button>
+    </ion-segment>
+    <div [ngSwitch]="segment_type">
+      <ion-list *ngSwitchCase="'pick-up'">
+        <h3 style="text-align: center;">Assign Vehicles</h3>
+        <span class="span-page-title-second">for trips on selected date</span>
+        <form [formGroup]="register_pickup" (ngSubmit)="onRegisterPickup()">
+          <ion-row>
+            <ion-col>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Vehicle</ion-label>
+                    <ion-select formControlName="vehicle_id" interface="popover" required>
+                      <ion-select-option *ngFor="let vehicle of vehicles" [value]="vehicle.id">{{vehicle.license}}</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="2" style="margin-top: 7%;">
+                  <ion-button size="small" (click)="onAddClicked()">
+                    <ion-icon slot="icon-only" name="add"></ion-icon>
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Start Time</ion-label>
+                <ion-datetime display-format="DD-MMM-YY HH:mm" picker-format="DD-MMM-YY HH:mm" formControlName="start_time"
+                  required></ion-datetime>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col></ion-col>
+            <ion-col>
+              <ion-button class="activated" type="submit" [color]="register_pickup.valid ? 'success' : 'danger'"
+                [disabled]="!register_pickup.valid">assign</ion-button>
+            </ion-col>
+            <ion-col></ion-col>
+          </ion-row>
+        </form>
+      </ion-list>
+  
+      <ion-list *ngSwitchCase="'labour'">
+          <h3 style="text-align: center;">Add New Labour Team</h3>
+        <span class="span-page-title-second">to the business</span>
+          <form [formGroup]="labour_team_form" (ngSubmit)="onRegisterLabourTeam()">
+            <ion-row>
+              <ion-col>
+                <ion-row>
+                  <ion-col>
+                    <ion-item>
+                      <ion-label position="floating">Labour Team Type</ion-label>
+                      <ion-select formControlName="labour_type_map" interface="popover">
+                        <ion-select-option *ngFor="let labour_type of labour_types" [value]="labour_type.id" required>{{labour_type.labour_team_type}}</ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="2" style="margin-top: 7%;">
+                    <ion-button size="small" (click)="onLabourTypeAdd()">
+                      <ion-icon slot="icon-only" name="add"></ion-icon>
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Team Name</ion-label>
+                  <ion-input  formControlName="name" required></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Team Incharge Name</ion-label>
+                  <ion-input formControlName="incharge_name" required></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Team Incharge Phone</ion-label>
+                  <ion-input type="number" formControlName="incharge_phone" required></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col></ion-col>
+              <ion-col>
+                <ion-button class="activated" type="submit" [color]="labour_team_form.valid ? 'success' : 'danger'"
+                  [disabled]="!labour_team_form.valid">add</ion-button>
+              </ion-col>
+              <ion-col></ion-col>
+            </ion-row>
+          </form>
+      </ion-list>
+  
+      <ion-list *ngSwitchCase="'storage'">
+          <h3 style="text-align: center;">Add New Section</h3>
+        <span class="span-page-title-second">to the storage</span>
+          <form [formGroup]="storage_section_form" (ngSubmit)="onRegisterStorageSection()">
+              <ion-row>
+                <ion-col>
+                  <ion-row>
+                    <ion-col>
+                      <ion-item>
+                        <ion-label position="floating">Storage</ion-label>
+                        <ion-select formControlName="storage" interface="popover">
+                          <ion-select-option *ngFor="let storage of storages_list" [value]="storage.id" required>{{storage.name}}</ion-select-option>
+                        </ion-select>
+                      </ion-item>
+                    </ion-col>
+                    <ion-col size="2" style="margin-top: 7%;">
+                      <ion-button size="small" (click)="onAddStorageClicked()">
+                        <ion-icon slot="icon-only" name="add"></ion-icon>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Section Name</ion-label>
+                    <ion-input  formControlName="name" required></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col></ion-col>
+                <ion-col>
+                  <ion-button class="activated" type="submit" [color]="storage_section_form.valid ? 'success' : 'danger'"
+                    [disabled]="!storage_section_form.valid">add</ion-button>
+                </ion-col>
+                <ion-col></ion-col>
+              </ion-row>
+            </form>
+      </ion-list>
+    </div>
+  </ion-content>

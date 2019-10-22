@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Download Routes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <!--<ion-list>-->
+  <!--<ion-item>-->
+  <ion-row class="ion-align-items-center ion-padding" style="font-weight: bold; font-size: x-large">
+    <!--<ion-row style="background-color: tan; text-align: center;">-->
+    <ion-col size="2" *ngIf="business_short_name !== 'Onganic'">Date</ion-col>
+    <ion-col [size]="business_short_name !== 'Onganic'? 7: 9">Route</ion-col>
+    <ion-col size="1">#</ion-col>
+    <ion-col size="2"></ion-col>
+  </ion-row>
+  <!--</ion-item>-->
+  <span *ngFor="let route of routes; let last_row = last; let first_row = first">
+    <ion-item>
+      <ion-label>
+        <ion-row align-items-start>
+          <ion-col size="2" *ngIf="business_short_name !== 'Onganic'">{{route['start_date_time']}}</ion-col>
+          <ion-col [size]="business_short_name !== 'Onganic'? 8: 10" style="font-size: small">
+            {{route.name | slice: 0:25}}</ion-col>
+          <ion-col size="2">{{route['sowing_count']}}</ion-col>
+        </ion-row>
+      </ion-label>
+      <ion-checkbox slot="end" (ionChange)="checkboxClicked($event, route['id'])"></ion-checkbox>
+    </ion-item>
+
+  </span>
+</ion-content><ion-footer>
+  <ion-row>
+    <ion-col></ion-col>
+    <ion-col>
+      <ion-button style="--background: #cc0033" (click)="downloadRoutes()">Download</ion-button>
+    </ion-col>
+    <ion-col></ion-col>
+  </ion-row>
+</ion-footer>

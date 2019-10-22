@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Kultivate: Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div style="height: 75px; width: 50%;margin: 0% 0% 0% 23%;">
+    <img src="assets/images/logo.png">
+  </div>
+
+  <div style="margin-top: 40%">
+    <form [formGroup]="login_form">
+      <ion-card class="custom-input">
+        <ion-row>
+          <ion-col size="2">
+            <ion-icon name="phone-portrait" style="color: #CC0033"></ion-icon>
+          </ion-col>
+          <ion-col>
+            <input type="text" formControlName="user_name" placeholder="Enter the User name">
+          </ion-col>
+        </ion-row>
+      </ion-card>
+      <ion-card class="custom-input">
+        <ion-row>
+          <ion-col size="2">
+            <ion-icon name="key" style="color: #CC0033"></ion-icon>
+          </ion-col>
+          <ion-col>
+            <input type="password" formControlName="password" placeholder="Password">
+          </ion-col>
+        </ion-row>
+      </ion-card>
+      <ion-card [ngClass]="login_form.valid? 'custom-button': 'custom-invalid-button'">
+        <ion-row (click)="onLoginClicled()">
+          <ion-col>
+            Login
+          </ion-col>
+        </ion-row>
+      </ion-card>
+      <!-- <ion-card [ngClass]="login_form.valid? 'custom-button': 'custom-invalid-button'">
+        <ion-row (click)="logIn()">
+          <ion-col>
+            Login
+          </ion-col>
+        </ion-row>
+      </ion-card> -->
+    </form>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col>
+        <a class="button" href="tel:+91 9003832999" style="text-decoration: none; white-space: nowrap; color: black;">
+          <ion-icon name="call">
+          </ion-icon>
+          <span>
+            Login Issues?
+          </span>
+        </a>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </div>
+</ion-content>

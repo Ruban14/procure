@@ -1,0 +1,44 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>Procurement History</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <div class="span-page-title-second">procurement history for business</div>
+    <ion-card *ngFor="let date of date_listed; let date_index=index;" style="background-color: lightgoldenrodyellow;">
+      <ion-card-header style="background-color: tan; font-weight: bold; padding-left: 30px;" (click)="showProcurements(date_index)">{{date}}
+        <ion-icon style="float:right; font-size: 19px" [name]="selected_index === date_index?  'arrow-dropdown-circle': 'arrow-dropright-circle'"></ion-icon>
+      </ion-card-header>
+      <span *ngIf="selected_index === date_index">
+        <ion-list style="background-color: lightgoldenrodyellow;" inset="true" lines="inset">
+          <ion-row *ngFor="let history of procurement_history[date]">
+            <ion-col size="2">
+              <span style="font-size: small;">
+                {{history['date_of_procurement'] | date: 'dd-MMM'}}
+              </span>
+            </ion-col>
+            <ion-col size="3">
+              <span style="font-size: small;">
+                <span style="font-style: italic;" *ngIf="history['village'] != ''">{{history['village'] |slice: 0:11}}<br></span>
+                {{history['farmer_name']}}
+              </span>
+            </ion-col>
+            <ion-col size="4">
+              <span style="font-size: small;">
+                {{history['crop_name']}}
+              </span>
+            </ion-col>
+            <ion-col size="3">
+              <span style="font-size: small;">
+                {{history['description']}}
+              </span>
+            </ion-col>
+          </ion-row>
+        </ion-list>
+      </span>
+    </ion-card>
+  </ion-content>

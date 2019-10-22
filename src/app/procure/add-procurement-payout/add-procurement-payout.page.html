@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Payout To Farmer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="expense_payout_form">
+    <ion-list lines="inset" inset="true">
+      <ion-row style="margin-top: -21px;">
+        <ion-col>
+          <ion-item>
+            <ion-label>Transaction Type</ion-label>
+            <!--<ion-input formControlName="type"></ion-input>-->
+            <ion-select interface="popover" formControlName="transaction_type_id">
+              <ion-select-option *ngFor="let type of transaction_types" [value]="type.id">{{type.name}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label>Transaction Status</ion-label>
+            <!--<ion-input formControlName="type"></ion-input>-->
+            <ion-select interface="popover" formControlName="transaction_status_id">
+              <ion-select-option *ngFor="let status of transaction_statuses" [value]="status.id">{{status.name}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <!--USERS-->
+          <ion-item>
+            <ion-label>Transact By</ion-label>
+            <!--<ion-input formControlName="type"></ion-input>-->
+            <ion-select interface="popover" formControlName="transacted_by_id">
+              <ion-select-option *ngFor="let user of users" [value]="user.id">{{user.name}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <ion-item lines="null">
+            <ion-label>Date Time</ion-label>
+            <!-- <ion-datetime display-format="DD, MMM , YYYY hh:mm A" formControlName="date_time"></ion-datetime> -->
+          </ion-item>
+          <input type="datetime-local" formControlName="date_time">
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label>Amount in Rs</ion-label>
+            <ion-input type="number" formControlName="amount"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-list>
+  </form>
+  <ion-row>
+    <ion-col>
+      <ion-button color="Medium" (click)="closePopup()">
+        <ion-icon name="arrow-round-back" style="color: blue;"></ion-icon>
+      </ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button [disabled]="!expense_payout_form.valid" (click)="addPayOut()">Add
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-content>

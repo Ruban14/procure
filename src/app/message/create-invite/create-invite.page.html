@@ -1,0 +1,125 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>Create Invite</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <form [formGroup]="new_invite_form" (ngSubmit)="onRegisterInvite()">
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Title</ion-label>
+            <ion-input formControlName="title" required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Description</ion-label>
+            <ion-textarea formControlName="description" required></ion-textarea>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Date</ion-label>
+            <ion-datetime display-format="DD-MMM-YY" picker-format="DD-MMM-YY" formControlName="date" required></ion-datetime>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Time</ion-label>
+            <ion-datetime display-format="HH:mm" picker-format="HH:mm" formControlName="time" required></ion-datetime>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="5">
+          <ion-item>
+            <ion-label position="floating">Latitude</ion-label>
+            <ion-input formControlName="location_latitude" required></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="5">
+          <ion-item>
+            <ion-label position="floating">Longitude</ion-label>
+            <ion-input formControlName="location_longitude" required></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="2">
+          <ion-button style="margin-top: 45%;" size="small" (click)="getPosition()">
+            <ion-icon name="locate" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Address</ion-label>
+            <ion-input formControlName="location_address" required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Organizer Name</ion-label>
+            <ion-input formControlName="organizer_name" required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Organizer Phone</ion-label>
+            <ion-input formControlName="organizer_phone" type="number" required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Organizer Email</ion-label>
+            <ion-input formControlName="organizer_email" type="email" required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Host Name</ion-label>
+            <ion-input formControlName="host_name" required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Host Phone</ion-label>
+            <ion-input formControlName="host_phone" type="number" required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Host Email</ion-label>
+            <ion-input formControlName="host_email" type="email" required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col></ion-col>
+        <ion-col>
+          <ion-button class="activated" type="submit" [color]="new_invite_form.valid ? 'success' : 'danger'" [disabled]="!new_invite_form.valid">Create</ion-button>
+        </ion-col>
+        <ion-col></ion-col>
+      </ion-row>
+    </form>
+  </ion-content>

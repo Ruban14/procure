@@ -1,0 +1,117 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>Truck => Storage</ion-title>
+      <ion-buttons slot="primary">
+        <ion-button (click)="dismissModal()">
+          <ion-icon slot="icon-only" color="warning" name="close-circle-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <ion-slides #slider [options]="slideOpts" style="width: 100%; height: 100%;">
+      <ion-slide style="overflow: auto;">
+        <ion-list>
+          <ion-list-header>Select Storage and Section to Store</ion-list-header>
+  
+          <ion-item *ngIf="storage_section_lot != null">
+            <ion-label>Storage</ion-label>
+            <ion-select [interfaceOptions]="customAlertOptions" interface="alert" placeholder="Select One"
+              [(ngModel)]="selected_storage" (ionChange)="onStoreChange()" style="padding: 0 14px 0 0;">
+              <ion-select-option *ngFor="let storage of storage_section_lot['storages']" [value]="storage">
+                {{storage['name']}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+  
+          <ion-item *ngIf="selected_storage != null">
+            <ion-label>Section</ion-label>
+            <ion-select interface="action-sheet" placeholder="Select One" [(ngModel)]="selected_section"
+              (ionChange)="onSectionChange()" style="padding: 0 14px 0 0;">
+              <ion-select-option *ngFor="let section of storage_section_lot['sections'][selected_storage['id']]"
+                [value]="section">{{section['name']}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <span *ngIf="selected_section != null">
+            <ion-item>
+              <ion-label>New Lot</ion-label>
+              <ion-checkbox style="margin: 9px 15px 9px 0px;" slot="start" [(ngModel)]="new_lot"></ion-checkbox>
+            </ion-item>
+            <span *ngIf="!new_lot">
+              <ion-item *ngIf="storage_section_lot['lots'].hasOwnProperty(selected_section['id'])">
+                <ion-label>Lot</ion-label>
+                <ion-select interface="action-sheet" placeholder="Select One" [(ngModel)]="selected_lot"
+                  (ionChange)="onLotChange()" style="padding: 0 14px 0 0;">
+                  <ion-select-option *ngFor="let lot of storage_section_lot['lots'][selected_section['id']]"
+                    [value]="lot">{{lot['lot_code']}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </span>
+  
+            <ion-item *ngIf="new_lot">
+              <ion-label position="floating">New Lot #</ion-label>
+              <ion-input [(ngModel)]="new_lot_value"></ion-input>
+            </ion-item>
+          </span>
+        </ion-list>
+        <ion-row>
+          <ion-col></ion-col>
+          <ion-col (click)="checkEssential()">
+            <ion-button>
+              <ion-icon style="font-size: 25px;" name="arrow-forward" slot="icon-only"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+      </ion-slide>
+      <ion-slide style="overflow: auto;">
+        <ion-list-header (click)="slideTo(0)" style="margin: 0; padding: 0">
+          <ion-button size="small">
+            <ion-icon style="font-size: 25px;" name="arrow-back"></ion-icon>
+          </ion-button>
+          <ion-label *ngIf="selected_lot != null" style="font-size: 14px; color: brown; white-space: normal;">
+            {{selected_storage['name'] | titlecase}}
+            /{{selected_section['name'] | titlecase}}/{{selected_lot['lot_code']}}</ion-label>
+          <ion-label *ngIf="new_lot" style="font-size: 14px; color: brown; white-space: normal;">
+            {{selected_storage['name'] | titlecase}}
+            /{{selected_section['name'] | titlecase}}/{{new_lot_value}}</ion-label>
+        </ion-list-header>
+        <span *ngFor="let unit_key of quantity_keys">
+          <span style="font-size: 11px">
+            <span>{{quantity_by_unit[unit_key]}}&nbsp;</span><span style="font-style: italic;">{{unit_key}},&nbsp;</span>
+          </span>
+        </span>
+        <ion-row>
+          <ion-col></ion-col>
+          <ion-col>
+            <ion-button size="small" color="success" (click)="toStorageClicked()">Store</ion-button>
+          </ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+  
+        <span *ngFor="let procurement of procurement_list; let last_procurement = last; let even_index=even">
+          <ion-item [style.background-color]="even_index ? '#e8e5e5': 'unset'">
+            <ion-row style="text-align: left; font-size: small;">
+              <ion-col size="1" (click)="onCloseClicked(procurement)">
+                <ion-icon name="close-circle" style="color:red;font-size: medium;float: right;"></ion-icon>
+              </ion-col>
+              <ion-col><span style="float:left;">
+                  {{procurement['qr_code']}}<br>
+                  {{procurement['farmer']}}</span>
+              </ion-col>
+              <ion-col>{{procurement['instance_crop_name']}}, {{procurement['grade']}}</ion-col>
+              <ion-col>{{procurement['quantity']}} {{procurement['unit']}}</ion-col>
+            </ion-row>
+          </ion-item>
+  
+          <ion-row *ngIf="last_procurement">
+            <ion-col></ion-col>
+            <ion-col>
+              <ion-button size="small" color="success" (click)="toStorageClicked()">Store</ion-button>
+            </ion-col>
+            <ion-col></ion-col>
+          </ion-row>
+        </span>
+      </ion-slide>
+    </ion-slides>
+  </ion-content>

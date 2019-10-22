@@ -1,0 +1,26 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>link-route</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+  
+    <ion-item>
+      <ion-label>Route</ion-label>
+      <ion-select [interfaceOptions]="'Popover'" interface="popover" placeholder="Select One" #route_id>
+        <ion-select-option *ngFor="let route of routes" [value]="route.id">{{route.name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="closePopUp()">Close</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button (click)="linkSowingWithRoute(route_id.value)">Assign</ion-button>
+      </ion-col>
+    </ion-row>
+  
+  </ion-content>
+  

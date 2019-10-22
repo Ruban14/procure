@@ -1,0 +1,62 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>Choose Vehicle</ion-title>
+      <ion-buttons slot="primary">
+        <ion-button (click)="onHomeIconClicked()">
+          <ion-icon slot="icon-only" name="home"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-list *ngIf="farmer != null" style="background-color: #9e9e9e;" lines="none">
+      <ion-item-sliding class="sliding-background"  lines="none">
+        <ion-item style="--background: #9e9e9e;">
+          <ion-avatar slot="start">
+            <img src="assets/dashboard_icon/farmer.svg">
+          </ion-avatar>
+          <ion-label style="color: white; font-size: 15px;">{{farmer['firstname']}}<br><span>FID-{{farmer['id']}}</span></ion-label>
+          <ion-label *ngIf="sowing != null" style="color: white; font-size: 13px;">
+            {{sowing['name']}}<br>SID-{{sowing['id']}}&nbsp;{{sowing['villgae']}}
+          </ion-label>
+        </ion-item>
+        <ion-item-options side="start">
+          <ion-item-option>
+            <a class="button" href="tel:{{farmer['phone']}}">
+              <ion-icon class="icon-slide" name="call"></ion-icon>
+            </a>
+          </ion-item-option>
+          <ion-item-option>
+            <a class="button" href="http://maps.google.com/?q={{farmer['latitude']+','+farmer['longitude']}}">
+              <!-- <a class="button" href="geo:?q={{farmer['latitude']+','+farmer['longitude']}}"> -->
+              <ion-icon class="icon-slide" name="pin"></ion-icon>
+            </a>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+    <ion-fab vertical="top" horizontal="end" slot="fixed">
+      <ion-fab-button size="small" (click)="onAddClicked()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    <span style="float: right; font-size: 11px; padding-right: 8px;">Add new trip</span>
+    <div padding-top>
+      <h5 text-center>Choose Vehicle to Procure</h5>
+      <span class="span-page-title-second">from the selected sowing</span>
+      <ion-card *ngFor="let vehicle of vehicle_list">
+        <ion-card-header (click)="onVehicleClicked(vehicle)">
+          <ion-label style="margin: 0%;">
+            <span style="font-size: 18px;">
+              {{vehicle.vehicle_license}}
+            </span>
+            <ion-icon name="arrow-dropright" slot="end" style="float: right; font-size: 25px"></ion-icon>
+          </ion-label>
+        </ion-card-header>
+      </ion-card>
+    </div>
+  </ion-content>

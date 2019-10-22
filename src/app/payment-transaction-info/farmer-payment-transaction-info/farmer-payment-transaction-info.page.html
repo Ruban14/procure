@@ -1,0 +1,32 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>Cost To Business</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <span class="ion-text-center" style="font-size: 15px; font-style: italic; margin: 20px">Cost Incurred By The Business For This Farmer</span>
+    <ion-row style="background-color: #ffcccb">
+      <ion-col size="1"></ion-col>
+      <ion-col size="3">Date</ion-col>
+      <ion-col size="4">Purpose</ion-col>
+      <ion-col size="3">Amount</ion-col>
+    </ion-row>
+    <ion-row *ngFor="let transaction of transactions; let transaction_index = index"
+             [ngStyle]="{'color': transaction.display_term === 'Payout'? 'green': ''}"
+    >
+      <ion-col size="1">{{transaction_index + 1}}</ion-col>
+      <ion-col size="3">{{transaction.date | date: 'dd-MMM-yy'}}</ion-col>
+      <ion-col size="4">{{transaction.display_term}}</ion-col>
+      <ion-col size="3">{{transaction.amount}}</ion-col>
+      <ion-col size="1" (click)="showFarmerTransactionEditModel(transaction, transaction_index)"
+               *ngIf="transaction.display_term !== 'Payout'"
+      >
+        <ion-icon name="create"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-content>
+  

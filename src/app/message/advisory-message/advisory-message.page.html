@@ -1,0 +1,29 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>Message</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="presentPopover()">
+          <ion-icon slot="icon-only" name="more"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <div text-capitalize *ngFor="let filter_factor of filter_factors; let last_heading=last">
+      <h3 style="font-style: italic; font-weight: bold">{{filter_factor}}</h3>
+      <ion-row>
+        <ion-col size="6" *ngFor="let filter_value of filter_values[filter_factor]">
+          <input type="checkbox" (click)="filterFactorChanged(filter_factor, filter_value)" [value]="filter_value" style="width: 20px; height: 20px"> &nbsp;{{filter_value}}
+        </ion-col>
+      </ion-row>
+  
+      <!--HORIZONTAL LINE-->
+      <div *ngIf="!last_heading" style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;"></div>
+    </div>
+    <!--<ion-button>choose action</ion-button>-->
+  </ion-content>
+  

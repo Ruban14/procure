@@ -1,0 +1,92 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>Product => Storage</ion-title>
+      <ion-buttons slot="primary">
+        <ion-button (click)="dismissModal()">
+          <ion-icon slot="icon-only" color="warning" name="close-circle-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <ion-list>
+      <ion-list-header>Select Storage to Store</ion-list-header>
+  
+      <ion-item *ngIf="storage_section_lot != null">
+        <ion-label>Storage</ion-label>
+        <ion-select [interfaceOptions]="customAlertOptions" interface="alert" placeholder="Select One"
+          [(ngModel)]="selected_storage" (ionChange)="onStoreChange()" style="padding: 0 14px 0 0;">
+          <ion-select-option *ngFor="let storage of storage_section_lot['storages']" [value]="storage">
+            {{storage['name']}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+  
+      <div *ngFor="let quantity_unit of storage_quantity_unit; let processed_product_index=index"
+        style="border: solid grey 2px; margin-bottom: 10px;">
+        <span
+          style="font-style: italic;padding-left: 15px; font-weight: bold; text-decoration: underline;">{{quantity_unit['processed_product']}}</span>
+        <ion-item>
+          <ion-label>Quantity:</ion-label>
+          <ion-input [(ngModel)]="quantity_unit['quantity']" type="number" step="0.01"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="crop_units != null">
+          <ion-label>Unit</ion-label>
+          <ion-select interface="popover" placeholder="Select One" style="padding: 0 14px 0 0;"
+            [(ngModel)]="quantity_unit['unit_id']">
+            <ion-select-option *ngFor="let crop_unit of crop_units" [value]="crop_unit['id']">
+              {{crop_unit['name']}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+  
+        <ion-item *ngIf="selected_storage != null">
+          <ion-label>Section</ion-label>
+          <ion-select interface="action-sheet" placeholder="Select One" [(ngModel)]="quantity_unit['selected_section_id']"
+            (ionChange)="onSectionChange(processed_product_index)" style="padding: 0 14px 0 0;">
+            <ion-select-option *ngFor="let section of storage_section_lot['sections'][selected_storage['id']]"
+              [value]="section['id']">{{section['name']}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+  
+        <span *ngIf="quantity_unit['selected_section_id'] != null">
+          <ion-item>
+            <ion-label>New Lot</ion-label>
+            <ion-checkbox style="margin: 9px 15px 9px 0px;" slot="start" [(ngModel)]="quantity_unit['new_lot']">
+            </ion-checkbox>
+          </ion-item>
+  
+          <span *ngIf="!quantity_unit['new_lot']">
+            <span *ngIf="storage_section_lot['lots'].hasOwnProperty(quantity_unit['selected_section_id'])">
+              <ion-item
+                *ngIf="storage_section_lot['lots'][quantity_unit['selected_section_id']].hasOwnProperty(quantity_unit['processed_product_id'])">
+                <ion-label>Lot</ion-label>
+                <ion-select interface="action-sheet" placeholder="Select One" [(ngModel)]="quantity_unit['selected_lot']"
+                  (ionChange)="onLotChange(processed_product_index)" style="padding: 0 14px 0 0;">
+                  <ion-select-option
+                    *ngFor="let lot of storage_section_lot['lots'][quantity_unit['selected_section_id']][quantity_unit['processed_product_id']]"
+                    [value]="lot['id']">
+                    {{lot['lot_code']}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </span>
+          </span>
+  
+          <ion-item *ngIf="quantity_unit['new_lot']">
+            <ion-label position="floating">New Lot #</ion-label>
+            <ion-input [(ngModel)]="quantity_unit['new_lot_value']"></ion-input>
+          </ion-item>
+  
+        </span>
+      </div>
+    </ion-list>
+  
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col (click)="toStorageClicked()">
+        <ion-button [disabled]="selected_storage == null">
+          Store <ion-icon style="font-size: 25px;" name="arrow-forward" slot="end"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-content>

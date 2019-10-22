@@ -1,0 +1,45 @@
+// http://ionicframework.com/docs/theming/
+@import "~@ionic/angular/css/core.css";
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+ion-modal.inset-modal {
+  // transparent black background overlay
+  background-color: rgba(0, 0, 0, .5) !important;
+  transition: opacity .25s ease-in-out;
+  padding: 20vh 10vw;
+}  
+
+ion-modal.processed-product-modal {
+  // transparent black background overlay
+  background-color: rgba(0, 0, 0, .5) !important;
+  transition: opacity .25s ease-in-out;
+  padding: 12vh 10vw;
+}
+
+ion-toolbar {
+  --color: white;
+  --background: var(--ion-toolbar-background-color);
+}
+
+.span-page-title-second {
+  margin-left: 22%;
+  margin-top: 3%; 
+  font-style: italic;
+}
+
+.icon-slide {
+  font-size: 20px;
+  color: var(--ion-color-medium-contrast)
+}
+
+.sliding-background {
+  background: tan;
+}

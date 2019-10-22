@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Farms</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <span *ngIf="farmers != null">
+    <ion-searchbar animated="true" show-cancel-button mode="ios" #filter_term></ion-searchbar>
+
+    <ion-list>
+    <ion-virtual-scroll [items]="farmers | searchFarmer: filter_term.value">
+      <ion-item *virtualItem="let farmer">
+      <ion-card style="width: 100%; margin: 5px 1px 1px 1px;height: 64px;">
+        <ion-row>
+          <ion-col size="2">
+            <ion-fab vertical="center" horizontal="center">
+                <ion-fab-button size="small" color="light">
+                  <ion-icon name="more"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-list side="end">
+                  <ion-fab-button color="warning" href="tel: {{farmer['phone']}}"><ion-icon style="color:black"
+                      name="call"></ion-icon></ion-fab-button>
+                  <ion-fab-button color="warning"
+                                  href="http://maps.google.com/?q={{farmer['latitude']+','+farmer['longitude']}}"><ion-icon style="color:black"
+                      name="pin"></ion-icon></ion-fab-button>
+                  <ion-fab-button color="warning" (click)="farmer_overall_payment_information(farmer['id'])"><ion-icon style="color:black"
+                      name="cash"></ion-icon></ion-fab-button>
+                  <ion-fab-button color="warning" (click)="register_farmer_payment(farmer['id'])">
+                    <ion-icon style="color:black"style="color:black" src="assets/dashboard_icon/money-sack.svg"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab-list>
+            </ion-fab>
+          </ion-col>
+          <ion-col>
+            <ion-row (click)="navPage( farmer['id'], farmer)">
+            <ion-label style="font-size: 17px">
+              {{farmer['firstname']}} - FID{{farmer['id']}}
+            </ion-label>
+            </ion-row>
+            <ion-row>
+              <span style="font-style: italic; font-size: 15px">{{farmer['village']}}</span>
+            </ion-row>
+          </ion-col>
+          <ion-col size="1">
+            <ion-icon name="arrow-dropright" class="ion-margin-vertical-center" style="float: right;"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+      </ion-item>
+    </ion-virtual-scroll>
+      </ion-list>
+  </span>
+  <span *ngIf="farmers == null">
+    <!-- <h5 style="margin-top: 60%;" text-center>Download the <i style="color: #cc0033; font-weight: bold;">Route</i> first</h5> -->
+    <h5 style="margin-top: 60%;" class="ion-text-center">Download the 
+      <i style="color: #cc0033; font-weight: bold;">Villages </i> from
+      <ion-chip (click)="onRouteClickded()">
+        <ion-label style="color: #cc0033">Routes</ion-label>
+      </ion-chip>
+    </h5>
+  </span>
+
+</ion-content>
