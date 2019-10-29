@@ -56,11 +56,11 @@
       <ion-row align-items-center>
         <ion-col size="6">
           <ion-item style="height: 58px"
-            [style.border]="farmer_register_form.value.phone == null || farmer_register_form.value.phone == ''  ? '1px solid red' : '1px solid lightgrey'">
+            [style.border]="farmer_register_form.value.is_whatsapp_number == null || farmer_register_form.value.phone == ''  ? '1px solid red' : '1px solid lightgrey'">
             <ion-label position="stacked">Is whatsapp number<ion-icon name="star" style="color: red">
               </ion-icon>
             </ion-label>
-            <ion-checkbox (ionChange)="change_whatsapp_number($event)" style="margin-top: 11px;"></ion-checkbox>
+            <ion-checkbox formControlName="is_whatsapp_number" (ionChange)="change_whatsapp_number($event)" style="margin-top: 11px;"></ion-checkbox>
           </ion-item>
         </ion-col>
         <ion-col size="6">
