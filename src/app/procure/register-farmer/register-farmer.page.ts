@@ -43,12 +43,14 @@ export class RegisterFarmerPage {
     this.farmer_register_form = this.formBuilder.group({
       first_name: [null, Validators.compose([FarmerRegisterValidator.checkFirstName])],
       last_name: [null, Validators.compose([FarmerRegisterValidator.checkLastName])],
-      phone: [null, Validators.compose([FarmerRegisterValidator.checkMobileNumber, Validators.required])],
+      mobile: [null, Validators.compose([FarmerRegisterValidator.checkMobileNumber, Validators.required])],
       is_whatsapp_number: [null, Validators.compose([Validators.required])],
-      alternate_phone: [null, Validators.compose([FarmerRegisterValidator.checkMobileNumber])],
+      whatsapp_number: [null, Validators.compose([Validators.required])],
+      alternate_mobile: [null, Validators.compose([FarmerRegisterValidator.checkMobileNumber])],
       landmark: [null],
       city: [null],
       street_address: [null, Validators.required],
+      email: [null, Validators.required],
       village: [null, Validators.required],
       taluk: [null,  Validators.required],
       district: [null, Validators.compose([Validators.required])],
@@ -64,8 +66,8 @@ export class RegisterFarmerPage {
 
   async ionViewWillEnter() {
     this.global.checkGPSPermission();
-    this.getStateDistrictTaluks();
-    this.getLanguages();
+    this.getStateDistrict();
+    // this.getLanguages();
   }
 
   change_whatsapp_number(event) {
@@ -171,34 +173,17 @@ export class RegisterFarmerPage {
     this.FarmerAreaVauleChanged();
   }
 
-  async getStateDistrictTaluks() {
+  async getStateDistrict() {
     const loading = await this.loadingCtrl.create({
       animated: true,
       spinner: 'lines-small',
     });
     loading.present();
-    this.platform.ready().then(() => {
-      this.storage.get('state_district_taluk').then((state_district_taluk) => {
-        console.log(state_district_taluk);
-        this.states = state_district_taluk['states'];
-        this.districts = state_district_taluk['districts'];
-        this.taluks = state_district_taluk['taluks'];
-        this.villages = state_district_taluk['villages'];
-        this.revenue_villages = state_district_taluk['revenue_village'];
-        this.blocks = state_district_taluk['block'];
-        loading.dismiss();
-      }).catch(() => {
-        loading.dismiss();
-      })
-      this.storage.get('caste_cv').then((data) => {
-        console.log(data)
-        this.caste_list = data;
-      });
-      this.storage.get('farm_holding_size_classification').then((holding_size) => {
-        this.form_holding_size_list = holding_size;
-        console.log(this.form_holding_size_list);
-      });
-    }).catch(() => {
+    this.httpService.getStatesAndDistrticts().subscribe((data) => {
+      console.log(data);
+      loading.dismiss();
+    }, (error) => {
+      console.log(error);
       loading.dismiss();
     });
   }

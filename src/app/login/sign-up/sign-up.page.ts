@@ -62,7 +62,6 @@ export class SignUpPage {
       buttons: ['Dismiss'],
       backdropDismiss: false
     });
-    
     await alert.present();
   }
 
@@ -83,7 +82,7 @@ export class SignUpPage {
     const password = this.sign_up_form.get('password')['value'];
     const password1 = this.sign_up_form.get('password2')['value'];
 
-    if (password == password1) {
+    if (password === password1) {
       console.log('Password Matched');
       return true;
     } else {
@@ -99,19 +98,19 @@ export class SignUpPage {
   }
 
   async onRegisterUser() {
-    if (this.checkPassword()) {
+    // if (this.checkPassword()) {
       const mobile = this.sign_up_form.value['mobile'];
-      const mobile_len =
-        Math.max(Math.floor(Math.log10(Math.abs(mobile))), 0) + 1;
-      console.log(mobile_len);
-      if (mobile_len != 10) {
-        alert('Enter Valid Mobile Number');
-        return false;
-      }
+      const mobile_len = Math.max(Math.floor(Math.log10(Math.abs(mobile))), 0) + 1;
+      // console.log(mobile_len);
+      // if (mobile_len !== 10) {
+      //   alert('Enter Valid Mobile Number');
+      //   return false;
+      // }
       const loading = await this.loadingCtrl.create({
         spinner: 'lines-small'
       });
       loading.present();
+      console.log(this.sign_up_form.value);
       this.httpService.tempRegister(this.sign_up_form.value).subscribe(
         data => {
           console.log(data);
@@ -129,7 +128,7 @@ export class SignUpPage {
           loading.dismiss();
         }
       );
-    }
+    // }
   }
 
   async confirmOTP(mobile_number) {

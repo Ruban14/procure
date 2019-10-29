@@ -349,7 +349,7 @@ export class HttpServiceService {
   }
 
   tempRegister(data) {
-    return this.httpClient.post(this.global.server_url + 'instance/signup/', data);
+    return this.httpClient.post(this.global.server_url + 'main/business/temp/register/', data);
   }
 
   confirmSignupOTP(data) {
@@ -369,7 +369,11 @@ export class HttpServiceService {
   }
 
   getPincodeDetails(data) {
-    return this.httpClient.post(this.global.server_url + 'instance/serve/pincode/district/block/revenuevillage/', data, { headers: this.headers })
+    return this.httpClient.post(this.global.server_url + 'instance/serve/pincode/district/block/revenuevillage/', data, { headers: this.headers });
+  }
+  
+  getStatesAndDistrticts() {
+    return this.httpClient.get(this.global.server_url + 'common/serve/state/districts/', { headers: this.headers });
   }
 
 

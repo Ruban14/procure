@@ -15,7 +15,7 @@
 <ion-content>
   <form [formGroup]="farmer_register_form">
     <ion-list lines="full">
-      <ion-row align-items-center>
+      <ion-row class="ion-align-items-center">
         <!-- first name -->
         <ion-col>
           <ion-item
@@ -35,7 +35,8 @@
           </ion-item>
         </ion-col>
       </ion-row>
-      <ion-row align-items-center>
+
+      <ion-row class="ion-align-items-center">
         <ion-col>
           <ion-item class="border-item">
             <ion-label position="stacked">E-mail</ion-label>
@@ -45,22 +46,24 @@
         <!-- mobile number -->
         <ion-col>
           <ion-item
-            [style.border]="farmer_register_form.value.phone == null || farmer_register_form.value.phone == ''  ? '1px solid red' : '1px solid lightgrey'">
+            [style.border]="farmer_register_form.value.mobile == null || farmer_register_form.value.mobile == ''  ? '1px solid red' : '1px solid lightgrey'">
             <ion-label position="stacked">Mobile Number<ion-icon name="star" style="color: red"></ion-icon>
             </ion-label>
-            <ion-input formControlName="phone" type="number"></ion-input>
+            <ion-input formControlName="mobile" type="number"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
+
       <!-- check for whatsapp -->
-      <ion-row align-items-center>
+      <ion-row class="ion-align-items-center">
         <ion-col size="6">
           <ion-item style="height: 58px"
             [style.border]="farmer_register_form.value.is_whatsapp_number == null || farmer_register_form.value.phone == ''  ? '1px solid red' : '1px solid lightgrey'">
             <ion-label position="stacked">Is whatsapp number<ion-icon name="star" style="color: red">
               </ion-icon>
             </ion-label>
-            <ion-checkbox formControlName="is_whatsapp_number" (ionChange)="change_whatsapp_number($event)" style="margin-top: 11px;"></ion-checkbox>
+            <ion-checkbox formControlName="is_whatsapp_number" (ionChange)="change_whatsapp_number($event)"
+              style="margin-top: 11px;"></ion-checkbox>
           </ion-item>
         </ion-col>
         <ion-col size="6">
@@ -70,7 +73,8 @@
           </ion-item>
         </ion-col>
       </ion-row>
-      <ion-row align-items-center>
+
+      <ion-row class="ion-align-items-center">
         <ion-col>
           <ion-item class="border-item">
             <ion-label position="stacked">Landmark
@@ -87,8 +91,9 @@
           </ion-item>
         </ion-col>
       </ion-row>
+
       <!-- street address -->
-      <ion-row align-items-center>
+      <ion-row class="ion-align-items-center">
         <ion-col>
           <ion-item class="border-item"
             [style.border]="farmer_register_form.value.street_address == null || farmer_register_form.value.street_address == ''  ? '1px solid red' : '1px solid lightgrey'">
@@ -98,42 +103,22 @@
             <ion-input formControlName="street_address"></ion-input>
           </ion-item>
         </ion-col>
-        <ion-col>
-          <ion-item class="border-item"
-            [style.border]="farmer_register_form.value.street_address == null || farmer_register_form.value.street_address == ''  ? '1px solid red' : '1px solid lightgrey'">
-            <ion-label position="stacked">Village<ion-icon name="star" style="color: red">
-              </ion-icon>
-            </ion-label>
-            <ion-input formControlName="street_address"></ion-input>
-          </ion-item>
-        </ion-col>
       </ion-row>
-      <ion-row>
-        <!-- state -->
-        <ion-col>
-          <ion-item class="border-item"
-            [style.border]="farmer_register_form.value.street_address == null || farmer_register_form.value.street_address == ''  ? '1px solid red' : '1px solid lightgrey'">
-            <ion-label position="stacked">Taluk<ion-icon name="star" style="color: red">
-              </ion-icon>
-            </ion-label>
-            <ion-input formControlName="taluk"></ion-input>
-          </ion-item>
-        </ion-col>
+
+      <ion-row class="ion-align-items-center">
         <ion-col>
           <ion-item
             [style.border]="farmer_register_form.value.district == null || farmer_register_form.value.district == ''  ? '1px solid red' : '1px solid lightgrey'">
             <ion-label position="stacked">State<ion-icon name="star" style="color: red"></ion-icon>
             </ion-label>
             <ion-select formControlName="state" interface="action-sheet">
-              <ion-select-option *ngFor="let state of states[farmer_register_form.value.state]" [value]="state.id">
+              <ion-select-option *ngFor="let state of states" [value]="state.id">
                 {{state.name}}
               </ion-select-option>
             </ion-select>
           </ion-item>
         </ion-col>
-      </ion-row>
-      <ion-row align-items-center>
-        <!-- district -->
+
         <ion-col>
           <ion-item
             [style.border]="farmer_register_form.value.district == null || farmer_register_form.value.district == ''  ? '1px solid red' : '1px solid lightgrey'">
@@ -147,11 +132,31 @@
             </ion-select>
           </ion-item>
         </ion-col>
-        <!-- village -->
-
       </ion-row>
-      <!-- pincode -->
-      <ion-row>
+
+      <ion-row class="ion-align-items-center">
+        <ion-col>
+          <ion-item class="border-item"
+            [style.border]="farmer_register_form.value.street_address == null || farmer_register_form.value.street_address == ''  ? '1px solid red' : '1px solid lightgrey'">
+            <ion-label position="stacked">Taluk<ion-icon name="star" style="color: red">
+              </ion-icon>
+            </ion-label>
+            <ion-input formControlName="taluk"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col>
+          <ion-item class="border-item"
+            [style.border]="farmer_register_form.value.street_address == null || farmer_register_form.value.street_address == ''  ? '1px solid red' : '1px solid lightgrey'">
+            <ion-label position="stacked">Village<ion-icon name="star" style="color: red">
+              </ion-icon>
+            </ion-label>
+            <ion-input formControlName="street_address"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-align-items-center">
         <ion-col>
           <ion-item
             [style.border]="farmer_register_form.value.pincode == null || farmer_register_form.value.pincode == ''  ? '1px solid red' : '1px solid lightgrey'">
@@ -161,8 +166,9 @@
           </ion-item>
         </ion-col>
       </ion-row>
+
       <!-- language -->
-      <ion-row align-items-center>
+      <ion-row class="ion-align-items-center">
         <ion-col>
           <ion-item class="border-item">
             <ion-label position="stacked">Language</ion-label>
@@ -174,6 +180,7 @@
           </ion-item>
         </ion-col>
       </ion-row>
+
       <ion-row>
         <ion-col size="5">
           <ion-item class="border-item">
@@ -193,7 +200,8 @@
           </ion-button>
         </ion-col>
       </ion-row>
-      <ion-row align-items-center>
+
+      <ion-row class="ion-align-items-center">
         <ion-col></ion-col>
         <ion-col>
           <ion-button class="activated" [disabled]="!farmer_register_form.valid" type="submit"
@@ -202,6 +210,7 @@
         </ion-col>
         <ion-col></ion-col>
       </ion-row>
+
     </ion-list>
   </form>
 </ion-content>
