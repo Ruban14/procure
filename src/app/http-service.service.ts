@@ -335,4 +335,43 @@ export class HttpServiceService {
     return this.httpClient.post(this.global.server_url + 'procure/serve/list/of/procurement/and/product/', data, { headers: this.headers });
   }
 
+  // procure
+  usernameValidation(data) {
+    return this.httpClient.post(this.global.server_url + 'instance/username/validation/', data);
+  }
+
+  otpValidation(data) {
+    return this.httpClient.post(this.global.server_url + 'instance/otp/validation/', data);
+  }
+
+  resetPassword(data) {
+    return this.httpClient.post(this.global.server_url + 'instance/reset/password/', data);
+  }
+
+  tempRegister(data) {
+    return this.httpClient.post(this.global.server_url + 'instance/signup/', data);
+  }
+
+  confirmSignupOTP(data) {
+    return this.httpClient.post(this.global.server_url + 'instance/confirm/otp/', data);
+  }
+
+  getStateDistrictTaluks() {
+    return this.httpClient.get(this.global.server_url + 'instance/serve/state/district/taluks/');
+  }
+
+  registerFarmer(data) {
+    return this.httpClient.post(this.global.server_url + 'instance/webservice/register/farmer/', data, { headers: this.headers });
+  }
+
+  serveLanguages() {
+    return this.httpClient.get(this.global.server_url + 'instance/serve/languages/', { headers: this.headers });
+  }
+
+  getPincodeDetails(data) {
+    return this.httpClient.post(this.global.server_url + 'instance/serve/pincode/district/block/revenuevillage/', data, { headers: this.headers })
+  }
+
+
+
 }

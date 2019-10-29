@@ -4,13 +4,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
-import { LoginPage } from './login.page';
+
+import { RegisterFarmerPage } from './register-farmer.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: LoginPage
+    component: RegisterFarmerPage
   }
 ];
 
@@ -19,10 +19,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    ReactiveFormsModule,
     RouterModule.forChild(routes),
-    TranslateModule.forChild()
+    ReactiveFormsModule
   ],
-  declarations: [LoginPage]
+  declarations: [RegisterFarmerPage]
 })
-export class LoginPageModule {}
+export class RegisterFarmerPageModule {}

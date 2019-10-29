@@ -11,7 +11,7 @@ const TOKEN_KEY = 'auth-token';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  authendicationState = new BehaviorSubject(false);
+  authendicationState = new BehaviorSubject(true);
   constructor(
     private global: GlobalService,
     private httpClient: HttpClient,

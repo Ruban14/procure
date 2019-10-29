@@ -104,6 +104,14 @@ const routes: Routes = [
     path: 'stock-list',
     loadChildren: () => import('./storage/stock-list/stock-list.module').then(m => m.StockListPageModule)
   },
+  {
+    path: 'sign-up',
+    loadChildren: () => import('./login/sign-up/sign-up.module').then(m => m.SignUpPageModule)
+  },
+  {
+    path: 'register-farmer',
+    loadChildren: () => import('./procure/register-farmer/register-farmer.module').then(m => m.RegisterFarmerPageModule)
+  },
 
 
   { path: 'auth',

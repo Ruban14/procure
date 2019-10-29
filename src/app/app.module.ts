@@ -9,7 +9,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
 import { GradeChannelFilterPipe } from './procure/grade-channel-filter.pipe';
 import { PopUpProcessPage } from './procure/pop-up-process/pop-up-process.page';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -30,7 +29,17 @@ import { HarvestPage } from './sowing-expense/harvest/harvest.page';
 import { TimeDiffInYearsPipe } from './global-pipe/time-diff-in-years.pipe';
 import { AssignLabourToProcurementPage } from './assign-labour/assign-labour-to-procurement/assign-labour-to-procurement.page';
 import { FarmerPaymentTransactionUpdatePage } from './payment-transaction-info/farmer-payment-transaction-update/farmer-payment-transaction-update.page';
-
+// inserted for procure app
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+export function HttpLoaderFactory(httpClient: HttpClient) {
+  return new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -73,12 +82,22 @@ import { FarmerPaymentTransactionUpdatePage } from './payment-transaction-info/f
     ReactiveFormsModule,
     HttpClientModule,
     IonicStorageModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
-    // Geolocation,
+    Diagnostic,
+    LocationAccuracy,
+    AndroidPermissions,
+    Geolocation,
     // Camera,
     AuthenticationService,
     // SMS,
