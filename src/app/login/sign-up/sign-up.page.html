@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
   <form [formGroup]="sign_up_form" style="padding-top: 8%;">
     <!-- business name -->
     <ion-card class="custom-input">
@@ -27,7 +27,7 @@
           <ion-icon name="contact" style="color: #282840"></ion-icon>
         </ion-col>
         <ion-col>
-          <input type="text" formControlName="short_name" placeholder="Sort Name" />
+          <input type="text" formControlName="short_name" placeholder="Short Name" />
         </ion-col>
       </ion-row>
     </ion-card>
@@ -40,7 +40,7 @@
         <ion-col style="text-align: left;">
           <ion-select placeholder="Select your Business category" formControlName="business_type" interface="popover">
             <ion-select-option *ngFor="let business of business_types" [value]="business['id']">
-              {{ business["name"] }}</ion-select-option>
+              {{ business['name'] }}</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
@@ -52,7 +52,7 @@
           <ion-icon name="locate" style="color: #777271;"></ion-icon>
         </ion-col>
         <ion-col>
-          <input type="text" required formControlName="city" placeholder="Enter the City" />
+          <input type="text" required formControlName="city" placeholder="City" />
         </ion-col>
       </ion-row>
     </ion-card>
@@ -63,7 +63,7 @@
           <ion-icon name="locate" style="color: #777271;"></ion-icon>
         </ion-col>
         <ion-col>
-          <input type="text" required formControlName="street" placeholder="Enter the street address" />
+          <input type="text" required formControlName="street" placeholder="Street" />
         </ion-col>
       </ion-row>
     </ion-card>
@@ -74,22 +74,7 @@
           <ion-icon name="locate" style="color: #777271;"></ion-icon>
         </ion-col>
         <ion-col>
-          <input type="text" required formControlName="taluk" placeholder="Enter the taluk" />
-        </ion-col>
-      </ion-row>
-    </ion-card>
-    <!-- district -->
-    <ion-card class="custom-input" style="padding:0px">
-      <ion-row>
-        <ion-col size="2">
-          <ion-icon name="map" style="color: #777271;margin-top: 12px;"></ion-icon>
-        </ion-col>
-        <ion-col style="text-align: left;">
-          <ion-select placeholder="Select your district" formControlName="district" interface="popover"
-            (ionChange)="onDistrictChanged(selected_district_id.value)" #selected_district_id required>
-            <ion-select-option *ngFor="let district of sorted_district" [value]="district['id']">
-              {{ district["name"] }}</ion-select-option>
-          </ion-select>
+          <input type="text" required formControlName="taluk" placeholder="Taluk" />
         </ion-col>
       </ion-row>
     </ion-card>
@@ -101,9 +86,24 @@
         </ion-col>
         <ion-col style="text-align: left;">
           <ion-select placeholder="Select your state" formControlName="state" interface="popover"
-            (ionChange)="onStateChanged(selected_district_id.value)" #selected_state_id required>
+            (ionChange)="onStateChanged(selected_state_id.value)" #selected_state_id required>
             <ion-select-option *ngFor="let state of states" [value]="state['id']">
               {{ state["name"] }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+    
+    <!-- district -->
+    <ion-card class="custom-input" style="padding:0px">
+      <ion-row>
+        <ion-col size="2">
+          <ion-icon name="map" style="color: #777271;margin-top: 12px;"></ion-icon>
+        </ion-col>
+        <ion-col style="text-align: left;">
+          <ion-select placeholder="Select your district" formControlName="district" interface="popover">
+            <ion-select-option *ngFor="let district of sorted_district" [value]="district['id']">
+              {{ district["name"] }}</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>

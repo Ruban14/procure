@@ -47,11 +47,31 @@ export class SignUpPage {
       email: [null, Validators.required],
       website: [null],
     });
-    this.httpService.getStateDistrictTaluks().subscribe(data => {
+
+    this.getSupportData();
+  }
+
+  getSupportData() {
+    this.getBusinessTypes();
+    this.getStateAndDistricts();
+  }
+
+  getBusinessTypes() {
+    this.httpService.getBusinessTypes().subscribe((data) => {
+      console.log(data);
+      this.business_types = data;
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
+  getStateAndDistricts() {
+    this.httpService.getStatesAndDistrticts().subscribe((data) => {
       console.log(data);
       this.states = data['states'];
-      console.log(this.districts);
-      this.blocks = data['block'];
+      this.districts = data['districts'];
+    }, (error) => {
+      console.log(error);
     });
   }
 
@@ -65,31 +85,11 @@ export class SignUpPage {
     await alert.present();
   }
 
-  onDistrictChanged(district_id) {
-    console.log(district_id);
-    this.selected_district = district_id;
-    this.sorted_block = this.blocks[this.selected_district];
-    console.log(this.sorted_block);
-  }
-
   onStateChanged(state_id) {
     console.log(state_id);
+    this.sign_up_form.reset({'district': null})
     this.selected_state = state_id;
     this.sorted_district = this.districts[this.selected_state];
-  }
-
-  checkPassword() {
-    const password = this.sign_up_form.get('password')['value'];
-    const password1 = this.sign_up_form.get('password2')['value'];
-
-    if (password === password1) {
-      console.log('Password Matched');
-      return true;
-    } else {
-      console.log('Password Mis-Matched');
-      this.mismatchAlert();
-      return false;
-    }
   }
 
   hideShowPassword() {

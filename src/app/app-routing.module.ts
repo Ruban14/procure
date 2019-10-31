@@ -6,7 +6,8 @@ import { ChildRoutingModule } from './child-routing.module';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+    loadChildren: () => import('./login/sign-up/sign-up.module').then(m => m.SignUpPageModule)
+    // loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
     path: 'login',

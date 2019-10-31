@@ -372,8 +372,13 @@ export class HttpServiceService {
     return this.httpClient.post(this.global.server_url + 'instance/serve/pincode/district/block/revenuevillage/', data, { headers: this.headers });
   }
   
+  // ==============
   getStatesAndDistrticts() {
     return this.httpClient.get(this.global.server_url + 'common/serve/state/districts/', { headers: this.headers });
+  }
+
+  getBusinessTypes() {
+    return this.httpClient.get(this.global.server_url + 'main/serve/business/types/', { headers: this.headers });
   }
 
 

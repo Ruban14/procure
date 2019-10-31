@@ -33,7 +33,8 @@ export class AppComponent {
       this.splashScreen.hide();
       if (state) {
         console.log('state true');
-        this.navCtrl.navigateRoot('auth/app/tabs/tab1');
+        this.navCtrl.navigateRoot('');
+        // this.navCtrl.navigateRoot('auth/app/tabs/tab1');
       } else {
         console.log('load login page');
         this.navCtrl.navigateRoot('login');
