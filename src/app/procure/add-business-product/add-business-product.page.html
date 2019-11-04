@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>add-business-product</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col size="4" (click)="add_products()">
+      <ion-icon style="font-size: 45px;color: cornflowerblue;" name="add-circle"></ion-icon>
+    </ion-col>
+    <ion-col style="font-size: 19px; margin-top: 11px;">
+      Add products to business
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col style="text-align: center; font-size: 22px;">
+      Your products
+    </ion-col>
+  </ion-row>
+  <ion-list lines="full" style="margin: 0% 1%"
+    *ngFor="let category of product_categories; let category_index=index; let odd_index=odd">
+    <ion-list-header (click)="onPageTitleSelected(category_index)" [style.background-color]="odd_index ? 'seashell': 'white'">
+      <span style="font-size: 22px;">{{category.name}}</span>
+      <ion-icon style="float:right; font-size: 19px"
+        [name]="selected_index === category_index ?  'arrow-dropdown': 'arrow-dropright'"></ion-icon>
+    </ion-list-header>
+    <span *ngIf="selected_index === category_index">
+      <ion-list *ngFor="let product of products[category.id]; let faq_page_index=index; let odd_faq_index=odd"
+        style="padding: 0; margin-left: 3%;">
+        <ion-item lines="none">
+          {{ product['name'] }}
+        </ion-item>
+      </ion-list>
+    </span>
+  </ion-list>
+</ion-content>

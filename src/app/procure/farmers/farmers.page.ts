@@ -33,20 +33,11 @@ export class FarmersPage implements OnInit {
   ngOnInit() {}
 
   async ionViewWillEnter() {
-    this.storage.get('farmers').then(
-      data => {
-        console.log(data);
-        if (data != null) {
-          this.farmers = data;
-          this.farmer_villages = Object.keys(data);
-        } else {
-          this.farmers = null;
-        }
-      },
-      error => {
-        console.log(error);
-      }
-    );
+   this.httpService.getFarmerDetails().subscribe((data)=> {
+     console.log(data);
+     this.farmers = data;
+     console.log(this.farmers);
+   });
   }
 
   showFarmers(village_index: number) {

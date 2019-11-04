@@ -6,12 +6,16 @@ import { ChildRoutingModule } from './child-routing.module';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./login/sign-up/sign-up.module').then(m => m.SignUpPageModule)
-    // loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+    // loadChildren: () => import('./login/sign-up/sign-up.module').then(m => m.SignUpPageModule)
+    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
     path: 'login',
     loadChildren: () => import('./login/login/login.module').then(m => m.LoginPageModule)
+  },
+  {
+    path: 'forgot-password/:user_id',
+    loadChildren: () => import('./login/forgot-password/forgot-password.module').then(m => m.ForgotPasswordPageModule)
   },
   {
     path: 'farmers',
@@ -112,6 +116,14 @@ const routes: Routes = [
   {
     path: 'register-farmer',
     loadChildren: () => import('./procure/register-farmer/register-farmer.module').then(m => m.RegisterFarmerPageModule)
+  },
+  {
+    path: 'add-business-product',
+    loadChildren: () => import('./procure/add-business-product/add-business-product.module').then(m => m.AddBusinessProductPageModule)
+  },
+  {
+    path: 'select-product',
+    loadChildren: () => import('./procure/add-business-product/select-product/select-product.module').then(m => m.SelectProductPageModule)
   },
 
 

@@ -16,11 +16,15 @@
           <ion-icon name="contact" style="color: #282840"></ion-icon>
         </ion-col>
         <ion-col>
-          <input type="text" formControlName="business_name" placeholder="Business name" />
+          <input type="text" formControlName="name" placeholder="Business name" />
         </ion-col>
       </ion-row>
+      <div style="font-style: italic; font-size: small"
+        [ngStyle]="{'color': sign_up_form.controls.name.valid? 'green': 'red'}"
+        *ngIf="sign_up_form.controls.name.errors !== null">
+        {{ sign_up_form.controls.name.errors['error']}}
+      </div>
     </ion-card>
-    <!-- short_name -->
     <ion-card class="custom-input">
       <ion-row>
         <ion-col size="2">
@@ -30,32 +34,29 @@
           <input type="text" formControlName="short_name" placeholder="Short Name" />
         </ion-col>
       </ion-row>
+      <div style="font-style: italic; font-size: small"
+        [ngStyle]="{'color': sign_up_form.controls.short_name.valid? 'green': 'red'}"
+        *ngIf="sign_up_form.controls.short_name.errors !== null">
+        {{ sign_up_form.controls.short_name.errors['error']}}
+      </div>
     </ion-card>
     <!-- business category -->
     <ion-card class="custom-input" style="padding:0px">
       <ion-row>
         <ion-col size="2">
-          <ion-icon name="map" style="color: #777271;margin-top: 12px;"></ion-icon>
+          <ion-icon name="shuffle" style="color: #777271;margin-top: 12px;"></ion-icon>
         </ion-col>
         <ion-col style="text-align: left;">
-          <ion-select placeholder="Select your Business category" formControlName="business_type" interface="popover">
+          <ion-select placeholder="Select your Business category" formControlName="business_type_id"
+            interface="popover">
             <ion-select-option *ngFor="let business of business_types" [value]="business['id']">
               {{ business['name'] }}</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
+
     </ion-card>
-    <!-- city -->
-    <ion-card class="custom-input">
-      <ion-row>
-        <ion-col size="2">
-          <ion-icon name="locate" style="color: #777271;"></ion-icon>
-        </ion-col>
-        <ion-col>
-          <input type="text" required formControlName="city" placeholder="City" />
-        </ion-col>
-      </ion-row>
-    </ion-card>
+
     <!-- street -->
     <ion-card class="custom-input">
       <ion-row>
@@ -63,59 +64,7 @@
           <ion-icon name="locate" style="color: #777271;"></ion-icon>
         </ion-col>
         <ion-col>
-          <input type="text" required formControlName="street" placeholder="Street" />
-        </ion-col>
-      </ion-row>
-    </ion-card>
-    <!-- taluk -->
-    <ion-card class="custom-input">
-      <ion-row>
-        <ion-col size="2">
-          <ion-icon name="locate" style="color: #777271;"></ion-icon>
-        </ion-col>
-        <ion-col>
-          <input type="text" required formControlName="taluk" placeholder="Taluk" />
-        </ion-col>
-      </ion-row>
-    </ion-card>
-    <!-- state -->
-    <ion-card class="custom-input" style="padding:0px">
-      <ion-row>
-        <ion-col size="2">
-          <ion-icon name="map" style="color: #777271;margin-top: 12px;"></ion-icon>
-        </ion-col>
-        <ion-col style="text-align: left;">
-          <ion-select placeholder="Select your state" formControlName="state" interface="popover"
-            (ionChange)="onStateChanged(selected_state_id.value)" #selected_state_id required>
-            <ion-select-option *ngFor="let state of states" [value]="state['id']">
-              {{ state["name"] }}</ion-select-option>
-          </ion-select>
-        </ion-col>
-      </ion-row>
-    </ion-card>
-    
-    <!-- district -->
-    <ion-card class="custom-input" style="padding:0px">
-      <ion-row>
-        <ion-col size="2">
-          <ion-icon name="map" style="color: #777271;margin-top: 12px;"></ion-icon>
-        </ion-col>
-        <ion-col style="text-align: left;">
-          <ion-select placeholder="Select your district" formControlName="district" interface="popover">
-            <ion-select-option *ngFor="let district of sorted_district" [value]="district['id']">
-              {{ district["name"] }}</ion-select-option>
-          </ion-select>
-        </ion-col>
-      </ion-row>
-    </ion-card>
-    <!-- pincode -->
-    <ion-card class="custom-input">
-      <ion-row>
-        <ion-col size="2">
-          <ion-icon name="pin" style="color: #777271;"></ion-icon>
-        </ion-col>
-        <ion-col>
-          <input type="number" required formControlName="pincode" placeholder="Enter the 6 digit pincode" />
+          <input type="text" formControlName="street" placeholder="Street" />
         </ion-col>
       </ion-row>
     </ion-card>
@@ -126,11 +75,87 @@
           <ion-icon name="pin" style="color: #777271;"></ion-icon>
         </ion-col>
         <ion-col>
-          <ion-textarea formControlName="address" placeholder="Enter the full address" style="text-align: left;margin-top: -11px;">
+          <ion-textarea formControlName="address" placeholder="Enter the full address"
+            style="text-align: left;margin-top: -11px;">
           </ion-textarea>
         </ion-col>
       </ion-row>
     </ion-card>
+
+    <!-- city -->
+    <ion-card class="custom-input">
+      <ion-row>
+        <ion-col size="2">
+          <ion-icon name="locate" style="color: #777271;"></ion-icon>
+        </ion-col>
+        <ion-col>
+          <input type="text" formControlName="city" placeholder="City" />
+        </ion-col>
+      </ion-row>
+    </ion-card>
+
+    <!-- taluk -->
+    <ion-card class="custom-input">
+      <ion-row>
+        <ion-col size="2">
+          <ion-icon name="locate" style="color: #777271;"></ion-icon>
+        </ion-col>
+        <ion-col>
+          <input type="text" formControlName="taluk" placeholder="Taluk" />
+        </ion-col>
+      </ion-row>
+    </ion-card>
+
+    <!-- state -->
+    <ion-card class="custom-input" style="padding:0px" *ngIf="states != null">
+      <ion-row>
+        <ion-col size="2">
+          <ion-icon name="map" style="color: #777271;margin-top: 12px;"></ion-icon>
+        </ion-col>
+        <ion-col style="text-align: left;">
+          <ion-select placeholder="Select your state" formControlName="state_id" interface="popover"
+            (ionChange)="onStateChanged(selected_state_id.value)" #selected_state_id>
+            <ion-select-option *ngFor="let state of states" [value]="state['id']">
+              {{ state["name"] }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+
+    <!-- district -->
+    <ion-card class="custom-input" style="padding:0px" *ngIf="sorted_district != null">
+      <ion-row>
+        <ion-col size="2">
+          <ion-icon name="map" style="color: #777271;margin-top: 12px;"></ion-icon>
+        </ion-col>
+        <ion-col style="text-align: left;">
+          <ion-select placeholder="Select your district" formControlName="district_id" interface="popover">
+            <ion-select-option *ngFor="let district of sorted_district" [value]="district['id']">
+              {{ district["name"] }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+
+
+
+    <!-- pincode -->
+    <ion-card class="custom-input">
+      <ion-row>
+        <ion-col size="2">
+          <ion-icon name="pin" style="color: #777271;"></ion-icon>
+        </ion-col>
+        <ion-col>
+          <input type="number" formControlName="pincode" placeholder="Enter the 6 digit pincode" />
+        </ion-col>
+      </ion-row>
+      <div style="font-style: italic; font-size: small"
+        [ngStyle]="{'color': sign_up_form.controls.pincode.valid? 'green': 'red'}"
+        *ngIf="sign_up_form.controls.pincode.errors !== null">
+        {{ sign_up_form.controls.pincode.errors['error']}}
+      </div>
+    </ion-card>
+
     <!-- mobile -->
     <ion-card class="custom-input">
       <ion-row>
@@ -141,7 +166,14 @@
           <input type="number" formControlName="mobile" placeholder="Enter the 10 digit phone number" />
         </ion-col>
       </ion-row>
+      <div style="font-style: italic; font-size: small"
+        [ngStyle]="{'color': sign_up_form.controls.mobile.valid? 'green': 'red'}"
+        *ngIf="sign_up_form.controls.mobile.errors !== null">
+        {{ sign_up_form.controls.mobile.errors['error']}}
+      </div>
     </ion-card>
+
+
     <!-- alterative mobile -->
     <ion-card class="custom-input">
       <ion-row>
@@ -149,9 +181,14 @@
           <ion-icon name="phone-portrait" style="color: #282840"></ion-icon>
         </ion-col>
         <ion-col>
-          <input type="number" formControlName="alternate_phone" placeholder="Enter the alternate phone number" />
+          <input type="number" formControlName="alternate_mobile" placeholder="Enter the alternate phone number" />
         </ion-col>
       </ion-row>
+      <div style="font-style: italic; font-size: small"
+        [ngStyle]="{'color': sign_up_form.controls.alternate_mobile.valid? 'green': 'red'}"
+        *ngIf="sign_up_form.controls.alternate_mobile.errors !== null">
+        {{ sign_up_form.controls.alternate_mobile.errors['error']}}
+      </div>
     </ion-card>
     <!--email -->
     <ion-card class="custom-input">
@@ -161,17 +198,6 @@
         </ion-col>
         <ion-col>
           <input type="text" formControlName="email" placeholder="Enter the Email address" />
-        </ion-col>
-      </ion-row>
-    </ion-card>
-    <!-- website -->
-    <ion-card class="custom-input">
-      <ion-row>
-        <ion-col size="2">
-          <ion-icon name="globe" style="color: #777271;"></ion-icon>
-        </ion-col>
-        <ion-col>
-          <input type="text" formControlName="website" placeholder="Enter your Website URL" />
         </ion-col>
       </ion-row>
     </ion-card>

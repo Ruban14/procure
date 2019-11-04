@@ -31,11 +31,11 @@ export class AuthenticationService {
   }
 
   login(data) {
-    this.httpClient.post(this.global.server_url + 'instance/login/for/token/', data).subscribe(res_data => {
+    this.httpClient.post(this.global.server_url + 'main/login/', data).subscribe(res_data => {
       console.log(res_data);
       this.authendicationState.next(true);
       this.events.publish('login_event', res_data['token']);
-      this.storage.set('user_profile', res_data['user_profile']);
+      this.storage.set('business_profile', res_data['business_profile']);
       return this.storage.set(TOKEN_KEY, res_data['token']);
     },
       error => {

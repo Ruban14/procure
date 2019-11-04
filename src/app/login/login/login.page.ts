@@ -43,7 +43,6 @@ export class LoginPage implements OnInit {
 
   onLoginClicled() {
     this.authendicationService.login(this.login_form.value);
-    this.login_form.reset();
     // this.navCtrl.navigateRoot('/app/tabs/(home:home)');
   }
 

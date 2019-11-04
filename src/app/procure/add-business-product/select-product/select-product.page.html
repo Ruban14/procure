@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>select Product</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list lines="full" style="margin: 0% 1%"
+    *ngFor="let category of product_categories; let category_index=index; let odd_index=odd">
+    <ion-list-header (click)="onPageTitleSelected(category_index)"
+      [style.background-color]="odd_index ? 'seashell': 'white'">
+      <span style="font-size: 22px;">{{category.name}}</span>
+      <ion-icon style="float:right; font-size: 19px"
+        [name]="selected_index === category_index ?  'arrow-dropdown': 'arrow-dropright'"></ion-icon>
+    </ion-list-header>
+    <span *ngIf="selected_index === category_index">
+      <ion-list *ngFor="let product of products[category.id]; let faq_page_index=index; let odd_faq_index=odd"
+        style="padding: 0; margin-left: 3%;">
+        <ion-item lines="none">
+          <ion-checkbox> </ion-checkbox> {{ product['name'] }}
+        </ion-item>
+      </ion-list>
+    </span>
+  </ion-list>
+</ion-content>

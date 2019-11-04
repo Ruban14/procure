@@ -24,6 +24,11 @@
             </ion-label>
             <ion-input formControlName="first_name"></ion-input>
           </ion-item>
+          <div style="font-style: italic; font-size: small"
+            [ngStyle]="{'color': farmer_register_form.controls.first_name.valid? 'green': 'red'}"
+            *ngIf="farmer_register_form.controls.first_name.errors !== null">
+            {{ farmer_register_form.controls.first_name.errors['error']}}
+          </div>
         </ion-col>
         <!-- last name -->
         <ion-col>
@@ -33,137 +38,83 @@
             </ion-label>
             <ion-input formControlName="last_name"></ion-input>
           </ion-item>
+          <div style="font-style: italic; font-size: small"
+            [ngStyle]="{'color': farmer_register_form.controls.last_name.valid? 'green': 'red'}"
+            *ngIf="farmer_register_form.controls.last_name.errors !== null">
+            {{ farmer_register_form.controls.last_name.errors['error']}}
+          </div>
         </ion-col>
       </ion-row>
-
+      <!-- mobile numbers -->
       <ion-row class="ion-align-items-center">
-        <ion-col>
-          <ion-item class="border-item">
-            <ion-label position="stacked">E-mail</ion-label>
-            <ion-input type="email" formControlName="email"></ion-input>
-          </ion-item>
-        </ion-col>
-        <!-- mobile number -->
-        <ion-col>
+        <ion-col size="6">
           <ion-item
             [style.border]="farmer_register_form.value.mobile == null || farmer_register_form.value.mobile == ''  ? '1px solid red' : '1px solid lightgrey'">
             <ion-label position="stacked">Mobile Number<ion-icon name="star" style="color: red"></ion-icon>
             </ion-label>
             <ion-input formControlName="mobile" type="number"></ion-input>
           </ion-item>
-        </ion-col>
-      </ion-row>
-
-      <!-- check for whatsapp -->
-      <ion-row class="ion-align-items-center">
-        <ion-col size="6">
-          <ion-item style="height: 58px"
-            [style.border]="farmer_register_form.value.is_whatsapp_number == null || farmer_register_form.value.phone == ''  ? '1px solid red' : '1px solid lightgrey'">
-            <ion-label position="stacked">Is whatsapp number<ion-icon name="star" style="color: red">
-              </ion-icon>
-            </ion-label>
-            <ion-checkbox formControlName="is_whatsapp_number" (ionChange)="change_whatsapp_number($event)"
-              style="margin-top: 11px;"></ion-checkbox>
-          </ion-item>
+          <div style="font-style: italic; font-size: small"
+            [ngStyle]="{'color': farmer_register_form.controls.mobile.valid? 'green': 'red'}"
+            *ngIf="farmer_register_form.controls.mobile.errors !== null">
+            {{ farmer_register_form.controls.mobile.errors['error']}}
+          </div>
         </ion-col>
         <ion-col size="6">
           <ion-item>
-            <ion-label position="stacked">Whatsapp Number</ion-label>
-            <ion-input formControlName="whatsapp_number" type="number"></ion-input>
+            <ion-label position="stacked">Alternate Mobile Number</ion-label>
+            <ion-input formControlName="alternate_mobile" type="number"></ion-input>
+          </ion-item>
+        
+        </ion-col>
+      </ion-row>
+      <!-- state -->
+      <ion-row class="ion-align-items-center">
+        <ion-col size='6' class="border-item"
+          [style.border]="farmer_register_form.value.state_id == null || farmer_register_form.value.state_id == ''  ? '1px solid red' : '1px solid lightgrey'">
+          <ion-select placeholder="Select your state" formControlName="state_id" interface="popover"
+            (ionChange)="onStateChanged(selected_state_id.value)" #selected_state_id>
+            <ion-select-option *ngFor="let state of states" [value]="state['id']">
+              {{ state["name"] }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <!-- district -->
+        <ion-col *ngIf="sorted_district != null" size='6' class="border-item"
+          [style.border]="farmer_register_form.value.district_id == null || farmer_register_form.value.district_id == ''  ? '1px solid red' : '1px solid lightgrey'">
+          <ion-select placeholder="Select your district" formControlName="district_id" interface="popover">
+            <ion-select-option *ngFor="let district of sorted_district" [value]="district['id']">
+              {{ district["name"] }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+      <!-- street address -->
+      <ion-row class="ion-align-items-center">
+        <ion-col>
+          <ion-item class="border-item">
+            <ion-label position="stacked">Door No, Address </ion-label>
+            <ion-input formControlName="street"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
+
 
       <ion-row class="ion-align-items-center">
         <ion-col>
           <ion-item class="border-item">
-            <ion-label position="stacked">Landmark
-            </ion-label>
-            <ion-input formControlName="landmark"></ion-input>
+            <ion-label position="stacked">Village</ion-label>
+            <ion-input formControlName="village"></ion-input>
           </ion-item>
         </ion-col>
-        <!-- state -->
         <ion-col>
           <ion-item>
-            <ion-label position="stacked">City
-            </ion-label>
-            <ion-input formControlName="city"></ion-input>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-
-      <!-- street address -->
-      <ion-row class="ion-align-items-center">
-        <ion-col>
-          <ion-item class="border-item"
-            [style.border]="farmer_register_form.value.street_address == null || farmer_register_form.value.street_address == ''  ? '1px solid red' : '1px solid lightgrey'">
-            <ion-label position="stacked">Door No, Address<ion-icon name="star" style="color: red">
-              </ion-icon>
-            </ion-label>
-            <ion-input formControlName="street_address"></ion-input>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-
-      <ion-row class="ion-align-items-center">
-        <ion-col>
-          <ion-item
-            [style.border]="farmer_register_form.value.district == null || farmer_register_form.value.district == ''  ? '1px solid red' : '1px solid lightgrey'">
-            <ion-label position="stacked">State<ion-icon name="star" style="color: red"></ion-icon>
-            </ion-label>
-            <ion-select formControlName="state" interface="action-sheet">
-              <ion-select-option *ngFor="let state of states" [value]="state.id">
-                {{state.name}}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-
-        <ion-col>
-          <ion-item
-            [style.border]="farmer_register_form.value.district == null || farmer_register_form.value.district == ''  ? '1px solid red' : '1px solid lightgrey'">
-            <ion-label position="stacked">District<ion-icon name="star" style="color: red"></ion-icon>
-            </ion-label>
-            <ion-select formControlName="district" interface="action-sheet">
-              <ion-select-option *ngFor="let district of districts[farmer_register_form.value.state]"
-                [value]="district.id">
-                {{district.name}}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-
-      <ion-row class="ion-align-items-center">
-        <ion-col>
-          <ion-item class="border-item"
-            [style.border]="farmer_register_form.value.street_address == null || farmer_register_form.value.street_address == ''  ? '1px solid red' : '1px solid lightgrey'">
-            <ion-label position="stacked">Taluk<ion-icon name="star" style="color: red">
-              </ion-icon>
-            </ion-label>
-            <ion-input formControlName="taluk"></ion-input>
-          </ion-item>
-        </ion-col>
-
-        <ion-col>
-          <ion-item class="border-item"
-            [style.border]="farmer_register_form.value.street_address == null || farmer_register_form.value.street_address == ''  ? '1px solid red' : '1px solid lightgrey'">
-            <ion-label position="stacked">Village<ion-icon name="star" style="color: red">
-              </ion-icon>
-            </ion-label>
-            <ion-input formControlName="street_address"></ion-input>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-
-      <ion-row class="ion-align-items-center">
-        <ion-col>
-          <ion-item
-            [style.border]="farmer_register_form.value.pincode == null || farmer_register_form.value.pincode == ''  ? '1px solid red' : '1px solid lightgrey'">
-            <ion-label position="stacked">Pincode<ion-icon name="star" style="color: red"></ion-icon>
-            </ion-label>
+            <ion-label position="stacked">Pincode</ion-label>
             <ion-input type="number" formControlName="pincode"></ion-input>
           </ion-item>
+          <div style="font-style: italic; font-size: small"
+            [ngStyle]="{'color': farmer_register_form.controls.pincode.valid? 'green': 'red'}"
+            *ngIf="farmer_register_form.controls.pincode.errors !== null">
+            {{ farmer_register_form.controls.pincode.errors['error']}}
+          </div>
         </ion-col>
       </ion-row>
 
@@ -172,9 +123,9 @@
         <ion-col>
           <ion-item class="border-item">
             <ion-label position="stacked">Language</ion-label>
-            <ion-select formControlName="communication_language" interface="action-sheet">
-              <ion-select-option *ngFor="let language of language_list" [value]="language.id">
-                {{language.name}}
+            <ion-select formControlName="language_id" interface="popover">
+              <ion-select-option *ngFor="let language of language_list" [value]="language['id']">
+                {{ language['name'] }}
               </ion-select-option>
             </ion-select>
           </ion-item>

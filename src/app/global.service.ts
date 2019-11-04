@@ -10,8 +10,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
   providedIn: 'root'
 })
 export class GlobalService {
-  private _server_url = 'http://localhost:8000/';
-  // private _server_url = 'http://192.168.0.4:8000/';
+  // private _server_url = 'http://localhost:8000/';
+  private _server_url = 'http://192.168.0.4:8001/';
 
   constructor(
     private toastCtrl: ToastController,

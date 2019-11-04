@@ -11,23 +11,17 @@ export class HttpServiceService {
 
   headers: HttpHeaders;
 
-  constructor(
-    private httpClient: HttpClient,
-    private global: GlobalService,
-    private storage: Storage,
-    private events: Events
+  constructor(private httpClient: HttpClient, private global: GlobalService, private storage: Storage, private events: Events
   ) {
     this.headers = new HttpHeaders();
-    this.storage.get('auth-token').then(
-      token => {
-        if (token != null) {
-          console.log('Token avl');
-          this.setTokenHeader(token);
-        }
-      },
-      error => {
-        console.error(error);
+    this.storage.get('auth-token').then(token => {
+      if (token != null) {
+        console.log('Token avl');
+        this.setTokenHeader(token);
       }
+    }, error => {
+      console.error(error);
+    }
     );
 
     this.events.subscribe('login_event', token => {
@@ -36,7 +30,7 @@ export class HttpServiceService {
   }
 
   login(data) {
-    return this.httpClient.post(this.global.server_url + 'instance/login/for/token/', data);
+    return this.httpClient.post(this.global.server_url + 'main/login/', data);
   }
 
   // append token to the header
@@ -335,17 +329,20 @@ export class HttpServiceService {
     return this.httpClient.post(this.global.server_url + 'procure/serve/list/of/procurement/and/product/', data, { headers: this.headers });
   }
 
+  // *************************************************************************
   // procure
+  // *************************************************************************
+
   usernameValidation(data) {
-    return this.httpClient.post(this.global.server_url + 'instance/username/validation/', data);
+    return this.httpClient.post(this.global.server_url + 'main/username/validation/', data);
   }
 
   otpValidation(data) {
-    return this.httpClient.post(this.global.server_url + 'instance/otp/validation/', data);
+    return this.httpClient.post(this.global.server_url + 'main/otp/validation/', data);
   }
 
   resetPassword(data) {
-    return this.httpClient.post(this.global.server_url + 'instance/reset/password/', data);
+    return this.httpClient.post(this.global.server_url + 'main/reset/password/', data);
   }
 
   tempRegister(data) {
@@ -353,7 +350,7 @@ export class HttpServiceService {
   }
 
   confirmSignupOTP(data) {
-    return this.httpClient.post(this.global.server_url + 'instance/confirm/otp/', data);
+    return this.httpClient.post(this.global.server_url + 'main/confirm/otp/', data);
   }
 
   getStateDistrictTaluks() {
@@ -361,26 +358,29 @@ export class HttpServiceService {
   }
 
   registerFarmer(data) {
-    return this.httpClient.post(this.global.server_url + 'instance/webservice/register/farmer/', data, { headers: this.headers });
+    return this.httpClient.post(this.global.server_url + 'main/save/farmer/', data, { headers: this.headers });
   }
 
   serveLanguages() {
-    return this.httpClient.get(this.global.server_url + 'instance/serve/languages/', { headers: this.headers });
+    return this.httpClient.get(this.global.server_url + 'common/serve/language/');
   }
 
   getPincodeDetails(data) {
     return this.httpClient.post(this.global.server_url + 'instance/serve/pincode/district/block/revenuevillage/', data, { headers: this.headers });
   }
-  
+
   // ==============
   getStatesAndDistrticts() {
-    return this.httpClient.get(this.global.server_url + 'common/serve/state/districts/', { headers: this.headers });
+    return this.httpClient.get(this.global.server_url + 'common/serve/state/districts/');
   }
 
   getBusinessTypes() {
     return this.httpClient.get(this.global.server_url + 'main/serve/business/types/', { headers: this.headers });
   }
 
+  getFarmerDetails() {
+    return this.httpClient.get(this.global.server_url + 'main/serve/farmers/', { headers: this.headers });
+  }
 
 
 }

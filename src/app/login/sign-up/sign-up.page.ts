@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import {  AlertController,  LoadingController,  NavController,  ToastController} from '@ionic/angular';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { AlertController, LoadingController, NavController, ToastController } from '@ionic/angular';
 import { HttpServiceService } from 'src/app/http-service.service';
+import { BusinessRegisterValidator } from './business-register-validate';
 
 @Component({
   selector: 'app-sign-up',
@@ -30,22 +31,23 @@ export class SignUpPage {
     private navCtrl: NavController
   ) {
     this.sign_up_form = this.formBuilder.group({
-      business_name: [null, Validators.required],
-      short_name: [null, Validators.required],
-      business_type: [null, Validators.required],
-      city: [null, Validators.required],
+      name: [null, Validators.compose([BusinessRegisterValidator.checkBusinessName])],
+      short_name: [null, Validators.compose([BusinessRegisterValidator.checkShortName])],
+      business_type_id: [null, Validators.required],
       street: [null, Validators.required],
+      address: [null, Validators.required],
+      city: [null, Validators.required],
+      district_id: [null, Validators.required],
+      state_id: [null, Validators.required],
       taluk: [null, Validators.required],
-      district: [null, Validators.required],
-      state: [null, Validators.required],
-      pincode: [null, Validators.required],
-      address: [null],
-      mobile: [null, Validators.required],
-      alternate_phone: [null],
+      pincode: [null, Validators.compose([BusinessRegisterValidator.checkPincode, Validators.required])],
+      mobile: [null, Validators.compose([BusinessRegisterValidator.checkMobileNumber, Validators.required])],
+      alternate_mobile:  [null, Validators.compose([BusinessRegisterValidator.checkAlternateMobileNumber])],
+      email: [null, Validators.required],
       password: [null, Validators.required],
       password2: [null, Validators.required],
-      email: [null, Validators.required],
-      website: [null],
+      latitude: [null],
+      longitude: [null]
     });
 
     this.getSupportData();
@@ -68,8 +70,8 @@ export class SignUpPage {
   getStateAndDistricts() {
     this.httpService.getStatesAndDistrticts().subscribe((data) => {
       console.log(data);
-      this.states = data['states'];
       this.districts = data['districts'];
+      this.states = data['states'];
     }, (error) => {
       console.log(error);
     });
@@ -87,7 +89,7 @@ export class SignUpPage {
 
   onStateChanged(state_id) {
     console.log(state_id);
-    this.sign_up_form.reset({'district': null})
+    this.sign_up_form.value['district'] = null;
     this.selected_state = state_id;
     this.sorted_district = this.districts[this.selected_state];
   }
@@ -98,36 +100,33 @@ export class SignUpPage {
   }
 
   async onRegisterUser() {
-    // if (this.checkPassword()) {
-      const mobile = this.sign_up_form.value['mobile'];
-      const mobile_len = Math.max(Math.floor(Math.log10(Math.abs(mobile))), 0) + 1;
-      // console.log(mobile_len);
-      // if (mobile_len !== 10) {
-      //   alert('Enter Valid Mobile Number');
-      //   return false;
-      // }
-      const loading = await this.loadingCtrl.create({
-        spinner: 'lines-small'
-      });
-      loading.present();
-      console.log(this.sign_up_form.value);
-      this.httpService.tempRegister(this.sign_up_form.value).subscribe(
-        data => {
-          console.log(data);
-          if (data != null) {
-          }
-          this.confirmOTP(mobile);
-          loading.dismiss();
-          this.sign_up_form.reset();
-        },
-        error => {
-          console.error(error);
-          const detailed_error = error['error'];
-          this.displayToast(detailed_error['detial'], 'top');
-          console.log(detailed_error);
-          loading.dismiss();
+    console.log(this.sign_up_form.value);
+    if (!this.sign_up_form.valid) {
+      alert('fill all the required fields');
+      return false;
+    }
+    const mobile = this.sign_up_form.value['mobile'];
+    const loading = await this.loadingCtrl.create({
+      spinner: 'lines-small'
+    });
+    loading.present();
+    this.httpService.tempRegister(this.sign_up_form.value).subscribe(
+      data => {
+        console.log(data);
+        if (data != null) {
         }
-      );
+        this.confirmOTP(mobile);
+        loading.dismiss();
+        this.sign_up_form.reset();
+      },
+      error => {
+        console.error(error);
+        const detailed_error = error['error'];
+        this.displayToast(detailed_error['detial'], 'top');
+        console.log(detailed_error);
+        loading.dismiss();
+      }
+    );
     // }
   }
 
